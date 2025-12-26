@@ -1,0 +1,24 @@
+<div class="flex flex-row items-center gap-10 px-20 py-5">
+    <img src="img/{{imageName}}" alt="{{ name }}" class="w-20" />
+    <div class="flex flex-col">
+        <h2 class="font-bold">{{ name }}</h2>
+        <p>{{ price }} €</p>
+    </div>
+    @switch (state) {
+    @case ("in_stock") {
+        <p class="bg-blue-500 text-white px-2 py-1 rounded">In Stock</p>
+    }
+    @case ("sold") {
+        <p class="bg-green-500 text-white px-2 py-1 rounded">Sold</p>
+    }
+    @case ("waiting_for_pic") {
+        <p class="bg-yellow-500 text-white px-2 py-1 rounded">Waiting for Picture</p>
+    }
+    @case ("return_asked") {
+        <p class="bg-red-500 text-white px-2 py-1 rounded">Return Asked</p>
+    }
+    @default {
+        <p class="bg-gray-500 text-white px-2 py-1 rounded">Unknown State</p>
+    }
+    }
+</div>
