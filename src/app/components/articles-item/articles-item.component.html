@@ -1,24 +1,28 @@
-<div class="flex flex-row items-center gap-10 px-20 py-5">
-    <img src="img/{{imageName}}" alt="{{ name }}" class="w-20" />
+<div class="flex flex-row items-center justify-evenly gap-2 py-10 px-2 border-t border-b border-gray-200">
+    <img src="img/{{imageName}}" alt="{{ name }}" class="w-20 h-20 object-cover rounded" />
     <div class="flex flex-col">
         <h2 class="font-bold">{{ name }}</h2>
-        <p>{{ price }} €</p>
+        <p>{{ id }} - {{ price }} €</p>
     </div>
     @switch (state) {
     @case ("in_stock") {
-        <p class="bg-blue-500 text-white px-2 py-1 rounded">In Stock</p>
+    <p class="bg-blue-500 text-white px-2 py-1 rounded-md text-lg">In Stock</p>
     }
     @case ("sold") {
-        <p class="bg-green-500 text-white px-2 py-1 rounded">Sold</p>
+    <p class="bg-green-500 text-white px-2 py-1 rounded-md text-lg">Sold</p>
     }
     @case ("waiting_for_pic") {
-        <p class="bg-yellow-500 text-white px-2 py-1 rounded">Waiting for Picture</p>
+    <p class="bg-yellow-500 text-white px-2 py-1 rounded-md text-lg">">Waiting for Picture</p>
     }
     @case ("return_asked") {
-        <p class="bg-red-500 text-white px-2 py-1 rounded">Return Asked</p>
+    <p class="bg-red-500 text-white px-2 py-1 rounded-md text-lg">">Return Asked</p>
     }
     @default {
-        <p class="bg-gray-500 text-white px-2 py-1 rounded">Unknown State</p>
+    <p class="bg-gray-500 text-white px-2 py-1 rounded-md text-lg">">Unknown State</p>
     }
     }
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+    </svg>
 </div>

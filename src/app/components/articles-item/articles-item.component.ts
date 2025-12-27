@@ -5,13 +5,13 @@ import { ArticleState } from '../../models/items-state-enum';
   selector: 'app-articles-item',
   imports: [],
   templateUrl: './articles-item.component.html',
-  styleUrl: './articles-item.component.css'
 })
 
 export class ArticlesItemComponent {
 
   imageName: string = "sample-article.png";
+  id: number = 10001;
   name: string = "Sample Article";
   price: number = 9.99;
-  state: ArticleState = ArticleState.unknown;
+  state: ArticleState = ArticleState.in_stock;
 }
