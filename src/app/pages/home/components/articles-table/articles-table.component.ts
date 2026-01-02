@@ -14,10 +14,6 @@ export class ArticleTableComponent {
     new ArticlesItemComponent(),
     new ArticlesItemComponent(),
     new ArticlesItemComponent(),
-    new ArticlesItemComponent(),
-    new ArticlesItemComponent(),
-    new ArticlesItemComponent(),
-    new ArticlesItemComponent(),
-    new ArticlesItemComponent(),
+    new ArticlesItemComponent()
   ];
 }

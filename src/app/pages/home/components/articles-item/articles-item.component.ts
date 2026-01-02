@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { ArticleState } from '../../models/items-state-enum';
+import { ArticleState } from '@models/items-state-enum';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-articles-item',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './articles-item.component.html',
 })
 
