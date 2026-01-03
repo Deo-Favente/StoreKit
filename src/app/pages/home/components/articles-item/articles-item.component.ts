@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { ArticleState } from '@models/items-state-enum';
+import { Component, Input } from '@angular/core';
+import { Article } from '@models/article-item.model';
 import { RouterLink } from "@angular/router";
 
 @Component({
@@ -9,10 +9,10 @@ import { RouterLink } from "@angular/router";
 })
 
 export class ArticlesItemComponent {
+  @Input() article!: Article;
 
-  imageName: string = "sample-article.png";
-  id: number = 10001;
-  name: string = "Sample Article";
-  price: number = 9.99;
-  state: ArticleState = ArticleState.in_stock;
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = '/img/articles/default.png';
+  }
 }

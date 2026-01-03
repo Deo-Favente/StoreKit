@@ -1,5 +1,6 @@
 <div id="table" class="flex flex-col center outline outline-gray-300 rounded overflow-scroll">
-@for (item of items; track $index) {
-<app-articles-item name="item.name" price="item.price" id="item.id"></app-articles-item>
+<!-- Dans le parent -->
+@for (article of articles; track article.id) {
+  <app-articles-item [article]="article" />
 }
 </div>

@@ -1,7 +1,20 @@
 <div class="w-full border-t border-green-200 bg-white shrink-0">
     <nav class="flex h-full justify-around">
-        <app-navbar-button icon="home" label="Accueil" />
-        <app-navbar-button icon="search" label="Recherche" [selected]="true" />
-        <app-navbar-button icon="settings" label="Paramètres" />
+        <app-navbar-button 
+            route="/home" 
+            icon="leaderboard" 
+            label="Accueil" 
+        />
+        <app-navbar-button 
+            route="/search" 
+            icon="search" 
+            label="Recherche" 
+            [selected]="true" 
+        />
+        <app-navbar-button 
+            route="/settings" 
+            icon="settings" 
+            label="Paramètres" 
+        />
     </nav>
 </div>

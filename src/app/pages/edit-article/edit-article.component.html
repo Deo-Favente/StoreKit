@@ -1,0 +1,36 @@
+<div class="flex flex-col p-4">
+    <h2 class="text-2xl font-bold mb-4">{{ title }}</h2>
+    
+    <div class="grid grid-cols-4 gap-4">
+        <!-- Photos existantes -->
+        @for (photo of photos; track $index) {
+            <div class="relative flex flex-col items-center group">
+                <img 
+                    [src]="'/assets/img/articles/' + id + '/' + photo" 
+                    [alt]="'Photo ' + ($index + 1)" 
+                    class="w-32 h-32 object-cover rounded mb-2" 
+                />
+                <!-- Bouton supprimer (optionnel) -->
+                <button 
+                    (click)="removePhoto($index)"
+                    class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity">
+                    ×
+                </button>
+            </div>
+        }
+        
+        <!-- Bouton ajouter photo -->
+        @if (photos.length < maxPhotos) {
+            <div 
+                (click)="addPhoto()"
+                class="flex flex-col items-center justify-center w-32 h-32 border-2 border-dashed border-gray-300 rounded cursor-pointer hover:bg-gray-100 transition-colors">
+                <span class="text-4xl text-gray-400">+</span>
+                <span class="text-sm text-gray-500">Ajouter</span>
+            </div>
+        }
+    </div>
+    
+    <p class="text-sm text-gray-500 mt-2">
+        {{ photos.length }} / {{ maxPhotos }} photos
+    </p>
+</div>
