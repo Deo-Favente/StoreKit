@@ -1,24 +1,109 @@
-<div class="flex flex-col p-10">
-    <h2 class="text-2xl font-bold mb-4">{{ article.name }}</h2>
-    <div class="flex justify-center items-center">
-        <div class="grid grid-cols-2 gap-4 justify-center items-center">
-            <!-- Photos existantes -->
-            @for (photo of photos; track $index) {
-            <img [src]="photo" [alt]="'Photo ' + ($index + 1)" (error)="onError($event)"
-                class="w-40 h-40 object-cover rounded mb-2 aspect-square bg-cover" />
-            }
-
-            <!-- Bouton ajouter photo -->
-            @if (photos.length < maxPhotos) { <div (click)="addPhoto()"
-                class="flex flex-col items-center justify-center w-32 h-32 border-2 border-dashed border-gray-300 rounded cursor-pointer hover:bg-gray-100 transition-colors">
-                <span class="text-4xl text-gray-400">+</span>
-                <span class="text-sm text-gray-500">Ajouter</span>
+<div class="flex flex-col p-10 ">
+    <form action="">
+        <div class="flex">
+            <h1 class="text-2xl font-bold my-2 text-gray-600">Article n°{{ article.id }}</h1>
+            <input type="submit" value="Enregistrer"
+                class="ml-auto bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer" />
         </div>
-        }
-    </div>
+        <section id="title" class="my-2">
+            <h2 class="text-md font-semibold text-gray-500">Title</h2>
+            <input type="text" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" required
+                [(ngModel)]="article.name" [ngModelOptions]="{standalone: true}" />
+        </section>
+        <section id="category">
+            <h2 class="text-md font-semibold text-gray-500">Category</h2>
+            <select class="border border-gray-300 rounded px-4 py-2 mb-6 w-48" required [(ngModel)]="article.category"
+                [ngModelOptions]="{standalone: true}">
+                @for (cat of categories; track cat) {
+                <option [value]="cat">{{ cat }}</option>
+                }
+            </select>
+        </section>
+        <section id="price" class="my-2">
+            <h2 class="text-md font-semibold text-gray-500">Initial Price (€)</h2>
+            <input type="number" class="border border-gray-300 rounded px-4 py-2 mb-6 w-32" required
+                [(ngModel)]="article.price" [ngModelOptions]="{standalone: true}" />
+        </section>
+        <section id="size" class="my-2">
+            <h2 class="text-md font-semibold text-gray-500">Article's size</h2>
+            <select class="border border-gray-300 rounded px-4 py-2 mb-6 w-48" required [(ngModel)]="article.size"
+                [ngModelOptions]="{standalone: true}">
+                @for (size of sizes; track size) {
+                <option [value]="size">{{ size }}</option>
+                }
+            </select>
+        </section>
+        <section id="condition" class="my-2">
+            <h2 class="text-md font-semibold text-gray-500">Article's condition</h2>
+            <select class="border border-gray-300 rounded px-4 py-2 mb-6 w-48" required [(ngModel)]="article.condition"
+                [ngModelOptions]="{standalone: true}">
+                @for (state of conditions; track state) {
+                <option [value]="state">{{ state }}</option>
+                }
+            </select>
+            <h3 class="text-md font-semibold text-gray-500">Describe the condition in detail</h3>
+            <input type="text" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" required
+                [(ngModel)]="article.detailCondition" [ngModelOptions]="{standalone: true}"
+                placeholder="Some scratches on the back..." />
+        </section>
+        <section id="options" class="my-2">
+            <h2 class="text-md font-semibold text-gray-500">Options</h2>
+            <div class="flex flex-col space-y-2">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" />
+                    <span class="ml-2 text-gray-700">Tags</span>
+                </label>
+                <label class="inline-flex items-center mb-6">
+                    <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" />
+                    <span class="ml-2 text-gray-700">Return Information</span>
+                </label>
+            </div>
+        </section>
+        <section id="description" class="my-2">
+            <h2 class="text-md font-semibold text-gray-500">Description (automatically generated)</h2>
+            <div class="flex justify-between">
+                <button class="my-2 text-sm bg-blue-500 text-white rounded px-4 py-2"
+                    (click)="generateDescription($event)">Generate Description</button>
+                <button class="mt-2 text-sm" (click)="copyDescription($event)"> <mat-icon
+                        fontIcon="content_copy"></mat-icon></button>
+            </div>
+            <div class="border border-gray-300 rounded px-4 py-2 mb-6 w-full h-32 resize-none">
+                {{ article.description }}
+
+            </div>
+        </section>
+        <section id="photos" class="my-2 flex justify-center items-center flex-col">
+            <div cdkDropList (cdkDropListDropped)="drop($event)" class="grid grid-cols-2 gap-4">
+                @for (photo of photos; track $index) {
+                <div cdkDrag class="relative group">
+                    <img [src]="photo" [alt]="'Photo ' + ($index + 1)" class="w-40 h-40 object-cover rounded"
+                        (error)="onError($event)" (click)="openPhotoViewer($index)" />
+
+                    <!-- Indicateur de position -->
+                    <div class="absolute top-2 left-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
+                        {{ $index + 1 }}
+                    </div>
+
+                    <!-- Icône de drag -->
+                    <div
+                        class="absolute top-2 right-2 bg-black bg-opacity-60 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                        <mat-icon class="text-sm">drag_indicator</mat-icon>
+                    </div>
+                </div>
+                }
+
+                <!-- Bouton ajouter photo -->
+                @if (photos.length < maxPhotos) { <div (click)="addPhoto()"
+                    class="flex flex-col items-center justify-center w-40 h-40 border-2 border-dashed border-gray-300 rounded cursor-pointer hover:bg-gray-100 transition-colors">
+                    <span class="text-4xl text-gray-400">+</span>
+                    <span class="text-sm text-gray-500">Ajouter</span>
+            </div>
+            }
 </div>
 
 <p class="text-sm text-gray-500 mt-2">
     {{ photos.length }} / {{ maxPhotos }} photos
 </p>
+</section>
+</form>
 </div>

@@ -5,3 +5,32 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.photo-dialog {
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+.photo-dialog .mat-mdc-dialog-container {
+  padding: 0 !important;
+  background: black !important;
+  height: 100%;
+  overflow: hidden !important;
+}
+
+.photo-dialog .mat-mdc-dialog-surface {
+  padding: 0 !important;
+  background: black !important;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden !important;
+}
+
+.photo-dialog .mdc-dialog__container {
+  overflow: hidden !important;
+}
+
+::-webkit-scrollbar { display: none; }
+

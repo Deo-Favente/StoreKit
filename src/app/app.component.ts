@@ -12,7 +12,7 @@ import { ArticleService } from '@services/article.service';
 })
 export class AppComponent implements OnInit {
   title: string = 'storekit';
-  
+
   articles: Article[] = [];
 
   constructor(private articleService: ArticleService) {}
