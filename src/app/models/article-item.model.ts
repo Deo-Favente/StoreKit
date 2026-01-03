@@ -5,4 +5,5 @@ export interface Article {
   name: string;
   price: number;
   state: ArticleState;
+  photoCount: number;
 }

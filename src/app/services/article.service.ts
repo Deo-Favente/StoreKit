@@ -1,32 +1,40 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-
-export interface Article {
-  id: number;
-  title: string;
-  photoCount: number;
-  description?: string;
-}
+import { Article } from '@models/article-item.model';
+import { ArticleState } from '@app/models/items-state-enum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
-  // Mock data - à remplacer par un vrai appel API
-  private articles: Article[] = [
-    { id: 1, title: 'Article 1', photoCount: 5 },
-    { id: 2, title: 'Article 2', photoCount: 3 },
-    { id: 3, title: 'Article 3', photoCount: 8 },
-  ];
+    private articles: Article[] = [
+    { id: 1001, name: 'Article 1', price: 10.99, state: ArticleState.in_stock, photoCount: 20 },
+    { id: 1002, name: 'Article 2', price: 15.49, state: ArticleState.sold, photoCount: 2 },
+    { id: 1003, name: 'Article 3', price: 7.99, state: ArticleState.waiting_for_pic, photoCount: 0 },
+  ]; // Replace with an API call
+
+  getArticles(): Observable<Article[]> {
+    return of(this.articles);
+  }
 
   getArticle(id: number): Observable<Article | undefined> {
     const article = this.articles.find(a => a.id === id);
     return of(article);
   }
 
-  getArticlePhotos(id: number, count: number): string[] {
-    return Array.from({ length: count }, (_, i) => 
+  getPhotoCount(id: number): Observable<number> {
+    const article = this.articles.find(a => a.id === id);
+    return of(article?.photoCount || 0);
+  }
+
+  getArticlePhotos(id: number): Observable<string[]> {
+    const article = this.articles.find(a => a.id === id);
+    const photoCount = article?.photoCount || 0;
+    
+    const photos = Array.from({ length: photoCount }, (_, i) => 
       `img/articles/${id}/photo${i + 1}.jpg`
     );
+    
+    return of(photos);
   }
 }

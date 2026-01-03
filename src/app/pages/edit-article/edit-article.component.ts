@@ -1,43 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
-interface Article {
-  id: number;
-  title: string;
-  photoCount: number;
-  // Ajoutez d'autres propriétés selon vos besoins
-}
+import { ArticleService } from '@services/article.service';
+import { Article } from '@models/article-item.model';
 
 @Component({
   selector: 'app-edit-article',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './edit-article.component.html'})
-  
+
 export class EditArticleComponent implements OnInit {
-  id: number = 0;
-  title: string = '';
+  article!: Article;
   photos: string[] = [];
   maxPhotos: number = 20;
 
-  // Mapping du nombre de photos par article
-  private photoCountMap: { [key: number]: number } = {
-    1: 5,
-    2: 3,
-    3: 8,
-    // Ajoutez vos articles ici
-  };
-
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private articleService: ArticleService) {}
 
   ngOnInit() {
-    // Récupérer l'ID depuis la route (si applicable)
-    const routeId = this.route.snapshot.params['id'];
-    if (routeId) {
-      this.id = +routeId; // Convertir en nombre
-    }
-
+    // Récupérer l'ID de l'article depuis les paramètres de la route
+    const articleId = Number(this.route.snapshot.paramMap.get('id'));
+    // Récupérer le nombre de photos depuis le service
+    this.articleService.getArticle(articleId).subscribe((article: Article | undefined) => {
+      if (article) {
+        this.article = article;
+      } else {
+        console.error('Article not found');
+      }
+    });
+    
     // Charger les détails de l'article
     this.loadArticleDetails();
   }
@@ -45,25 +36,25 @@ export class EditArticleComponent implements OnInit {
   loadArticleDetails() {
     // Pour l'instant, utiliser le mapping
     // Plus tard, vous pourrez remplacer par un appel API
-    const photoCount = this.photoCountMap[this.id] || 0;
+    const photoCount = this.article.photoCount || 0;
     
     this.photos = Array.from({ length: photoCount }, (_, i) => 
-      `photo${i + 1}.jpg`
+      `img/articles/${this.article.id}/photo${i + 1}.png`
     );
-    
-    // Charger le titre (à remplacer par un vrai service)
-    this.title = `Article ${this.id}`;
-  }
+    }
 
   addPhoto() {
     if (this.photos.length < this.maxPhotos) {
       console.log('Ajouter une photo');
-      // Logique pour ajouter une photo
-      // Par exemple, ouvrir un input file
     }
   }
 
   removePhoto(index: number) {
     this.photos.splice(index, 1);
+  }
+
+  onError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    target.src = '/img/articles/default.png';
   }
 }
