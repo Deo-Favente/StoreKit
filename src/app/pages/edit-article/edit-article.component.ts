@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +9,8 @@ import { ArticleCategory, ArticleCondition, ArticleSize } from '@app/models/arti
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { PhotoViewerComponent } from '@components/photo-viewer/photo-viewer.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-article',
@@ -28,6 +30,14 @@ export class EditArticleComponent implements OnInit {
   constructor(private route: ActivatedRoute, private articleService: ArticleService, private dialog: MatDialog) { }
 
   ngOnInit() {
+        this.subscription = this.articleChanges$
+      .pipe(
+        debounceTime(1000),
+      )
+      .subscribe(() => {
+        this.saveArticle();
+      });
+
     // Récupérer l'ID de l'article depuis les paramètres de la route
     const articleId = Number(this.route.snapshot.paramMap.get('id'));
     // Récupérer le nombre de photos depuis le service
@@ -49,6 +59,66 @@ export class EditArticleComponent implements OnInit {
     this.photos = Array.from({ length: photoCount }, (_, i) =>
       `img/articles/${this.article.id}/photo${i + 1}.png`
     );
+  }
+
+  // États de sauvegarde
+  saveState: 'saved' | 'saving' | 'unsaved' = 'saved';
+  saveStateText: string = 'Changements sauvegardés';
+  
+  private articleChanges$ = new Subject<any>();
+  private subscription?: Subscription;
+
+  ngOnDestroy() {
+    this.subscription?.unsubscribe();
+  }
+
+  // Appelée à chaque modification d'un champ
+  onArticleChange() {
+    this.saveState = 'unsaved';
+    this.saveStateText = 'Modifications non sauvegardées...';
+    this.articleChanges$.next(this.article);
+  }
+
+  // Sauvegarde l'article
+  private saveArticle() {
+    this.saveState = 'saving';
+    this.saveStateText = 'Sauvegarde en cours...';
+
+    // Simuler un appel API
+    // Remplacez ceci par votre vrai service
+    setTimeout(() => {
+      console.log('Article sauvegardé:', this.article);
+      
+      this.saveState = 'saved';
+      this.saveStateText = 'Changements sauvegardés';
+    }, 500);
+
+    // Exemple avec un vrai service:
+    // this.articleService.updateArticle(this.article).subscribe({
+    //   next: () => {
+    //     this.saveState = 'saved';
+    //     this.saveStateText = 'Changements sauvegardés';
+    //   },
+    //   error: (err) => {
+    //     this.saveState = 'unsaved';
+    //     this.saveStateText = 'Erreur de sauvegarde';
+    //     console.error(err);
+    //   }
+    // });
+  }
+
+  // Obtenir la classe CSS selon l'état
+  getSaveStateClass(): string {
+    switch (this.saveState) {
+      case 'saved':
+        return 'text-green-500';
+      case 'saving':
+        return 'text-blue-500';
+      case 'unsaved':
+        return 'text-orange-500';
+      default:
+        return 'text-gray-500';
+    }
   }
 
   addPhoto() {
@@ -95,9 +165,27 @@ openPhotoViewer(index: number) {
 
   generateDescription(event: Event) {
     event.preventDefault();
+
+    // Récupérer les informations nécessaires
+    const name = this.article.name || '';
+    const category = this.article.category || '';
+    const size = this.article.size || '';
+    const condition = this.article.condition || '';
+    const detailCondition = this.article.detailCondition || '';
+
+    // Générer une description simple
+    const description = `Vente de ${name}, catégorie ${category}, taille ${size}. État : ${condition}. Détails : ${detailCondition}.`;
+
+    this.article.description = description;
   }
 
   copyDescription(event: Event) {
     event.preventDefault();
+
+    if (this.article.description) {
+      navigator.clipboard.writeText(this.article.description).then(() => {
+        console.log('Description copiée dans le presse-papiers');
+      });
+    }
   }
 }
