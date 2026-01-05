@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { ArticleService } from '@services/article.service';
+import { BrandService } from '@services/brand.service';
 import { Article } from '@models/article-item.model';
 import { ArticleCategory, ArticleCondition, ArticleSize } from '@app/models/article-features-enum';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -26,8 +27,9 @@ export class EditArticleComponent implements OnInit {
   categories = Object.values(ArticleCategory);
   conditions = Object.values(ArticleCondition);
   sizes = Object.values(ArticleSize);
+  brands: string[] = [];
 
-  constructor(private route: ActivatedRoute, private articleService: ArticleService, private dialog: MatDialog) { }
+  constructor(private route: ActivatedRoute, private articleService: ArticleService, private brandService: BrandService, private dialog: MatDialog) { }
 
   ngOnInit() {
         this.subscription = this.articleChanges$
@@ -49,6 +51,11 @@ export class EditArticleComponent implements OnInit {
 
     // Charger les détails de l'article
     this.loadArticleDetails();
+    // Charger les marques
+    this.brandService.getBrands().subscribe((brands: string[]) => {
+      this.brands = brands;
+    });
+
   }
 
   loadArticleDetails() {

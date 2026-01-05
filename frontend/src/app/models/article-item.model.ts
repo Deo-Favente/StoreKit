@@ -6,6 +6,7 @@ export interface Article {
   name: string;
   category: ArticleCategory;
   price: number;
+  brand: string;
   size: ArticleSize;
   state: ArticleState;
   photoCount: number;
