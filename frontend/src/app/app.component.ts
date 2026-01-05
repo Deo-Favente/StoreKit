@@ -11,7 +11,7 @@ import { ArticleService } from '@services/article.service';
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
-  title: string = 'storekit';
+  title: string = 'com.storekit';
 
   articles: Article[] = [];
 

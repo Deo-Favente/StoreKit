@@ -8,6 +8,6 @@ import { HeaderComponent } from "@components/header/header.component";
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
-  title = 'storekit';
+  title = 'com.storekit';
 
 }
