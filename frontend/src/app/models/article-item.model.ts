@@ -1,5 +1,5 @@
-import { ArticleState } from "./items-state-enum";
-import { ArticleCategory, ArticleSize, ArticleCondition } from "./article-features-enum";
+import { ArticleState } from "./items-state.enum";
+import { ArticleCategory, ArticleSize, ArticleCondition } from "./article-features.enum";
 
 export interface Article {
   id: number;

@@ -6,12 +6,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { ArticleService } from '@services/article.service';
 import { BrandService } from '@services/brand.service';
 import { Article } from '@models/article-item.model';
-import { ArticleCategory, ArticleCondition, ArticleSize } from '@app/models/article-features-enum';
+import { ArticleCategory, ArticleCondition, ArticleSize } from '@app/models/article-features.enum';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { PhotoViewerComponent } from '@components/photo-viewer/photo-viewer.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-edit-article',
@@ -51,6 +52,8 @@ export class EditArticleComponent implements OnInit {
 
     // Charger les détails de l'article
     this.loadArticleDetails();
+    // Charger la description
+    this.generateDescription(new Event('generate'));
     // Charger les marques
     this.brandService.getBrands().subscribe((brands: string[]) => {
       this.brands = brands;
@@ -98,6 +101,7 @@ export class EditArticleComponent implements OnInit {
       
       this.saveState = 'saved';
       this.saveStateText = 'Changements sauvegardés';
+      this.generateDescription(new Event('generate'));
     }, 500);
 
     // Exemple avec un vrai service:
@@ -181,7 +185,11 @@ openPhotoViewer(index: number) {
     const detailCondition = this.article.detailCondition || '';
 
     // Générer une description simple
-    const description = `Vente de ${name}, catégorie ${category}, taille ${size}. État : ${condition}. Détails : ${detailCondition}.`;
+    const description = environment.descriptionTemplate
+      .replace('{condition}', condition)
+      .replace('{brand}', this.article.brand || '')
+      .replace('{category}', category)
+      .replace('{size}', size);
 
     this.article.description = description;
   }

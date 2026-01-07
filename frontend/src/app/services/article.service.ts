@@ -1,8 +1,8 @@
 import { Article } from '@models/article-item.model';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ArticleState } from '@app/models/items-state-enum';
-import { ArticleCategory, ArticleSize, ArticleCondition } from '@app/models/article-features-enum';
+import { ArticleState } from '@app/models/items-state.enum';
+import { ArticleCategory, ArticleSize, ArticleCondition } from '@app/models/article-features.enum';
 
 @Injectable({
   providedIn: 'root'
