@@ -1,5 +1,6 @@
 package com.storekit.controller;
 
+import com.storekit.dto.ArticleDTO;
 import com.storekit.model.ArticleEntity;
 import com.storekit.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,11 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ArticleEntity create(@RequestBody ArticleEntity article) {
+    public ArticleEntity create(@RequestBody ArticleDTO.PostInput articleDTO) {
+        ArticleEntity article = new ArticleEntity();
+        article.setName(articleDTO.getName());
+        article.setDescription(articleDTO.getDescription());
+        article.setPrice(articleDTO.getPrice());
         return articleService.createArticle(article);
     }
 

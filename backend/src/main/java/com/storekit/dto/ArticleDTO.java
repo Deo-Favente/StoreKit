@@ -3,8 +3,9 @@ package com.storekit.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 @AllArgsConstructor
 @Builder
 public class ArticleDTO {
