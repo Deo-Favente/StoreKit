@@ -1,4 +1,4 @@
-package com.storekit.configuration;
+package com.storekit.config;
 
 import com.storekit.model.exception.ArticleCreationException;
 import org.apache.coyote.BadRequestException;
@@ -28,4 +28,5 @@ public class GlobalExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
+
 }

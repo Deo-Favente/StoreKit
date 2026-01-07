@@ -33,7 +33,7 @@ public class ArticleEntity {
 
     @ManyToOne
     @JoinColumn(name = "brand_id")
-    private BrandEntity brand;
+       private BrandEntity brand;
 
     @Enumerated(EnumType.STRING)
     private ArticleSize size;
