@@ -102,6 +102,7 @@ export class EditArticleComponent implements OnInit {
       this.saveState = 'saved';
       this.saveStateText = 'Changements sauvegardés';
       this.generateDescription(new Event('generate'));
+      this.articleService.updateArticle(this.article.id, this.article).subscribe();
     }, 500);
 
     // Exemple avec un vrai service:
