@@ -1,19 +1,38 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
+
+export interface Brand {
+  id?: number;
+  name: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class BrandService {
-    private brands: string[] = ["Nike", "Adidas", "Vintage"]; // Replace with an API call
+  private apiUrl = `${environment.apiUrl}/brands`;
 
-  getBrands(): Observable<string[]> {
-    return of(this.brands);
+  constructor(private http: HttpClient) {}
+
+  getAllBrands(): Observable<Brand[]> {
+    return this.http.get<Brand[]>(this.apiUrl);
   }
 
-  getBrand(id: number): Observable<string | undefined> {
-    const brand = this.brands[id];
-    return of(brand);
+  getBrand(id: number): Observable<Brand> {
+    return this.http.get<Brand>(`${this.apiUrl}/${id}`);
+  }
+
+  createBrand(brand: Brand): Observable<Brand> {
+    return this.http.post<Brand>(this.apiUrl, brand);
+  }
+
+  updateBrand(id: number, brand: Brand): Observable<Brand> {
+    return this.http.put<Brand>(`${this.apiUrl}/${id}`, brand);
+  }
+
+  deleteBrand(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

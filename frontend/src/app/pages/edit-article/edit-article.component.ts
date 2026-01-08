@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { ArticleService } from '@services/article.service';
-import { BrandService } from '@services/brand.service';
+import { Brand, BrandService } from '@services/brand.service';
 import { Article } from '@models/article-item.model';
 import { ArticleCategory, ArticleCondition, ArticleSize } from '@app/models/article-features.enum';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -55,8 +55,8 @@ export class EditArticleComponent implements OnInit {
     // Charger la description
     this.generateDescription(new Event('generate'));
     // Charger les marques
-    this.brandService.getBrands().subscribe((brands: string[]) => {
-      this.brands = brands;
+    this.brandService.getAllBrands().subscribe((brands: Brand[]) => {
+      this.brands = brands.map(brand => brand.name);
     });
 
   }

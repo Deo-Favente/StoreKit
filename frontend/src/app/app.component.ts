@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   constructor(private articleService: ArticleService) {}
 
   ngOnInit() {
-    this.articleService.getArticles().subscribe((data) => {
+    this.articleService.getAllArticles().subscribe((data) => {
       this.articles = data;
     });
   }

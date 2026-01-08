@@ -15,7 +15,7 @@ export class ArticleTableComponent {
     this.loadArticles();
   }
   loadArticles() {
-    this.articleService.getArticles().subscribe((data) => {
+    this.articleService.getAllArticles().subscribe((data) => {
       this.articles = data;
     });
 }

@@ -1,41 +1,34 @@
 import { Article } from '@models/article-item.model';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ArticleState } from '@app/models/items-state.enum';
-import { ArticleCategory, ArticleSize, ArticleCondition } from '@app/models/article-features.enum';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
-    private articles: Article[] = [
-    { id: 1001, name: 'Article 1', price: 10.99, brand: "Nike", state: ArticleState.in_stock, photoCount: 20, condition: ArticleCondition.new_with_label, category: ArticleCategory.Tshirt, size: ArticleSize.M, detailCondition: 'Brand new with tags', description: 'A stylish T-shirt perfect for casual wear.' },
-    { id: 1002, name: 'Article 2', price: 15.49, brand: "Adidas", state: ArticleState.sold, photoCount: 2, condition: ArticleCondition.good, category: ArticleCategory.Other, size: ArticleSize.OneSize, detailCondition: 'Lightly used' },
-    { id: 1003, name: 'Article 3', price: 7.99, brand: "Vintage", state: ArticleState.waiting_for_pic, photoCount: 0, condition: ArticleCondition.satisfying, category: ArticleCategory.Pants, size: ArticleSize.S, detailCondition: 'Some wear and tear' },
-  ]; // Replace with an API call
+  private apiUrl = `${environment.apiUrl}/articles`;
 
-  getArticles(): Observable<Article[]> {
-    return of(this.articles);
+  constructor(private http: HttpClient) {}
+
+  getAllArticles(): Observable<Article[]> {
+    return this.http.get<Article[]>(this.apiUrl);
   }
 
-  getArticle(id: number): Observable<Article | undefined> {
-    const article = this.articles.find(a => a.id === id);
-    return of(article);
+  getArticle(id: number): Observable<Article> {
+    return this.http.get<Article>(`${this.apiUrl}/${id}`);
   }
 
-  getPhotoCount(id: number): Observable<number> {
-    const article = this.articles.find(a => a.id === id);
-    return of(article?.photoCount || 0);
+  createArticle(article: Article): Observable<Article> {
+    return this.http.post<Article>(this.apiUrl, article);
   }
 
-  getArticlePhotos(id: number): Observable<string[]> {
-    const article = this.articles.find(a => a.id === id);
-    const photoCount = article?.photoCount || 0;
-    
-    const photos = Array.from({ length: photoCount }, (_, i) => 
-      `img/articles/${id}/photo${i + 1}.jpg`
-    );
-    
-    return of(photos);
+  updateArticle(id: number, article: Article): Observable<Article> {
+    return this.http.put<Article>(`${this.apiUrl}/${id}`, article);
+  }
+
+  deleteArticle(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
