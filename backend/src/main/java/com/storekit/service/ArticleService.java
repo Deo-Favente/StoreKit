@@ -25,12 +25,12 @@ public class ArticleService {
         return articleRepository.save(article);
     }
 
-    public ArticleEntity updateArticle(Long id, ArticleEntity article) {
-        article.setId(id);
+    public ArticleEntity updateArticle(ArticleEntity article) {
         return articleRepository.save(article);
     }
 
     public void deleteArticle(Long id) {
         articleRepository.deleteById(id);
     }
+
 }

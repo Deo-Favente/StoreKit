@@ -12,24 +12,32 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 @Entity
 @Data
 @Table(name = "articles")
 public class ArticleEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_seq")
+    @SequenceGenerator(
+            name = "article_seq",
+            sequenceName = "article_sequence",
+            initialValue = 1000,
+            allocationSize = 1
+    )
     private Long id;
 
     private String name;
-    private String description;
     private Double price;
 
     @Enumerated(EnumType.STRING)
     private ArticleCategory category;
-
 
     @ManyToOne
     @JoinColumn(name = "brand_id")

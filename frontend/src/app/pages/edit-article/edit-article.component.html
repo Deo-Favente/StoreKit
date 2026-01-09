@@ -1,7 +1,12 @@
 <div class="flex flex-col p-10">
     <form action="">
         <div class="flex items-center justify-between">
+            @if (article.id == 0) {
+            <h1 class="text-2xl font-bold my-2 text-gray-600 text-nowrap">New Article</h1>
+            }
+            @else {
             <h1 class="text-2xl font-bold my-2 text-gray-600 text-nowrap">Article n°{{ article.id }}</h1>
+            }
             <span id="save-state" class="ml-4 self-center text-sm text-end transition-colors"
                 [ngClass]="getSaveStateClass()">
                 {{ saveStateText }}
@@ -51,7 +56,7 @@
     <select class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" [(ngModel)]="article.category"
         (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}">
         @for (cat of categories; track cat) {
-        <option [value]="cat">{{ cat }}</option>
+        <option [value]="cat" >{{ cat }}</option>
         }
     </select>
 </section>
@@ -87,7 +92,7 @@
     <select class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" [(ngModel)]="article.condition"
         (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}">
         @for (state of conditions; track state) {
-        <option [value]="state">{{ state }}</option>
+        <option [value]="state" >{{ state }}</option>
         }
     </select>
 </section>
@@ -120,7 +125,7 @@
                     Generate Description
                 </button>
                     -->
-        <button class="mt-2 text-sm hover:text-gray-500" (click)="copyDescription($event)">
+        <button class="mt-2 text-sm hover:text-gray-500" (click)="copyDescription()">
             <mat-icon fontIcon="content_copy"></mat-icon>
         </button>
     </div>

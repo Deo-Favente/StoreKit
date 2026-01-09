@@ -5,5 +5,5 @@ public enum ArticleCondition {
     NEW_NO_TAGS,
     VERY_GOOD,
     GOOD,
-    ACCEPTABLE
+    SATISFYING,
 }

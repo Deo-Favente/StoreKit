@@ -7,5 +7,6 @@ public enum ArticleCategory {
     JACKET,
     BAG,
     SHOES,
-    ACCESSORY
+    ACCESSORY,
+    OTHER
 }

@@ -1,16 +1,13 @@
-import { ArticleState } from "./items-state.enum";
-import { ArticleCategory, ArticleSize, ArticleCondition } from "./article-features.enum";
-
 export interface Article {
   id: number;
   name: string;
-  category: ArticleCategory;
+  category: string;
   price: number;
   brand: string;
-  size: ArticleSize;
-  state: ArticleState;
+  size: string;
+  state: string;
   photoCount: number;
-  condition: ArticleCondition;
+  condition: string;
   detailCondition: string;
   description?: string;
 }

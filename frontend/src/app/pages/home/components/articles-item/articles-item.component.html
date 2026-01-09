@@ -1,5 +1,9 @@
 <div class="flex flex-row items-center justify-evenly gap-2 py-10 px-2 border-t border-b border-gray-200">
+     @if (article.photoCount > 0) {
     <img src="/img/articles/{{ article.id }}/1.png" (error)="onImageError($event)" alt="{{ article.name }}" class="w-20 h-20 object-cover rounded" />
+    } @else {
+    <img src="/img/articles/default.png" (error)="onImageError($event)" alt="{{ article.name }}" class="w-20 h-20 object-cover rounded" />
+    }
     <div class="flex flex-col">
         <h2 class="font-bold">{{ article.name }}</h2>
         <p>{{ article.id }} - {{ article.price }} €</p>
@@ -15,10 +19,10 @@
     <p class="bg-yellow-500 text-white px-2 py-1 rounded-md text-lg">Need Picture</p>
     }
     @case ("return_asked") {
-    <p class="bg-red-500 text-white px-2 py-1 rounded-md text-lg">">Return Asked</p>
+    <p class="bg-red-500 text-white px-2 py-1 rounded-md text-lg">Return Asked</p>
     }
     @default {
-    <p class="bg-gray-500 text-white px-2 py-1 rounded-md text-lg">">Unknown State</p>
+    <p class="bg-gray-500 text-white px-2 py-1 rounded-md text-lg">Unknown State</p>
     }
     }   
     <a [routerLink]="['/article', article.id]" class="">

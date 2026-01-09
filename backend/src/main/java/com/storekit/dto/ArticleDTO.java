@@ -12,9 +12,8 @@ public class ArticleDTO {
     @Data
     public static class PostInput {
         private String name;
-        private String description;
         private Double price;
-        private Long brandId;
+        private String brandName;
         private String category;
         private String size;
         private String color;
