@@ -4,10 +4,11 @@ import { RouterOutlet } from '@angular/router';
 import { OnInit } from '@angular/core';
 import { Article } from '@models/article-item.model';
 import { ArticleService } from '@services/article.service';
+import { NotificationComponent } from '@components/notification/notification.component';
 
 @Component({
   selector: 'app-root',
-  imports: [NavbarComponent, RouterOutlet],
+  imports: [NavbarComponent, RouterOutlet, NotificationComponent],
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {

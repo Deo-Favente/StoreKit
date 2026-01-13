@@ -1,5 +1,6 @@
+import { NotificationService } from '@services/notification.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,7 +31,7 @@ export class EditArticleComponent implements OnInit {
 
   brands: string[] = [];
 
-  constructor(private route: ActivatedRoute, private articleService: ArticleService, private brandService: BrandService, private dialog: MatDialog) { }
+  constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService, private brandService: BrandService, private dialog: MatDialog, private notificationService: NotificationService) { }
 
   ngOnInit() {
     this.subscription = this.articleChanges$
@@ -121,6 +122,10 @@ export class EditArticleComponent implements OnInit {
           this.saveState = 'saved';
           this.saveStateText = 'Changes saved';
           this.generateDescription();
+          this.notificationService.showSuccess('Article created successfully');
+          this.router.navigate(['/article', createdArticle.id], { 
+            replaceUrl: true  
+          });
         },
         error: (err) => {
           this.saveState = 'unsaved';
