@@ -1,5 +1,6 @@
 package com.storekit.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.storekit.enumeration.ArticleCategory;
 import com.storekit.enumeration.ArticleCondition;
 import com.storekit.enumeration.ArticleSize;
@@ -51,8 +52,8 @@ public class ArticleEntity {
 
     private String detailCondition;
 
-    @Enumerated(EnumType.STRING)
-    private ArticleState state;
+    @Enumerated(EnumType.ORDINAL)
+    private ArticleState state = ArticleState.IN_STOCK;
 
     private Integer photoCount;
 }

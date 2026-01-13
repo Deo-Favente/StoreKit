@@ -1,34 +1,44 @@
 <div class="flex flex-row items-center justify-evenly gap-2 py-10 px-2 border-t border-b border-gray-200">
-     @if (article.photoCount > 0) {
-    <img src="/img/articles/{{ article.id }}/1.png" (error)="onImageError($event)" alt="{{ article.name }}" class="w-20 h-20 object-cover rounded" />
+    @if (article.photoCount > 0) {
+    <img src="/img/articles/{{ article.id }}/1.png" (error)="onImageError($event)" alt="{{ article.name }}"
+        class="w-20 h-20 object-cover rounded" />
     } @else {
-    <img src="/img/articles/default.png" (error)="onImageError($event)" alt="{{ article.name }}" class="w-20 h-20 object-cover rounded" />
+    <img src="/img/articles/default.png" (error)="onImageError($event)" alt="{{ article.name }}"
+        class="w-20 h-20 object-cover rounded" />
     }
     <div class="flex flex-col">
         <h2 class="font-bold">{{ article.name }}</h2>
         <p>{{ article.id }} - {{ article.price }} €</p>
     </div>
-    @switch (article.state) {
-    @case ("in_stock") {
-    <p class="bg-blue-500 text-white px-2 py-1 rounded-md text-lg">In Stock</p>
-    }
-    @case ("sold") {
-    <p class="bg-green-500 text-white px-2 py-1 rounded-md text-lg">Sold</p>
-    }
-    @case ("waiting_for_pic") {
-    <p class="bg-yellow-500 text-white px-2 py-1 rounded-md text-lg">Need Picture</p>
-    }
-    @case ("return_asked") {
-    <p class="bg-red-500 text-white px-2 py-1 rounded-md text-lg">Return Asked</p>
-    }
-    @default {
-    <p class="bg-gray-500 text-white px-2 py-1 rounded-md text-lg">Unknown State</p>
-    }
-    }   
+    <form class="flex items-center justify-center flex-col content-center">
+        <select class="border border-gray-300 rounded px-4 py-2" [(ngModel)]="article.state"
+            [ngModelOptions]="{standalone: true}">
+            <option [value]="0" class="bg-blue-500">
+                In Stock
+            </option>
+
+            <option [value]="1" class="bg-green-500">
+                Sold
+            </option>''
+
+            <option [value]="2" class="bg-yellow-500">
+                Need Picture
+            </option>
+
+            <option [value]="3" class="bg-red-500">
+                Return Asked
+            </option>
+
+            <option [value]="4" class="bg-gray-500">
+                Unknown
+            </option>
+        </select>
+    </form>
+
     <a [routerLink]="['/article', article.id]" class="">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-        class="size-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-    </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
     </a>
 </div>

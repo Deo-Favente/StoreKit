@@ -5,7 +5,7 @@ export interface Article {
   price: number;
   brand: string;
   size: string;
-  state: string;
+  state: number;
   photoCount: number;
   condition: string;
   detailCondition: string;
