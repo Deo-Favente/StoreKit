@@ -1,14 +1,10 @@
 package com.storekit.controller;
 
 import com.storekit.dto.ArticleDTO;
-import com.storekit.enumeration.ArticleCategory;
-import com.storekit.enumeration.ArticleCondition;
-import com.storekit.enumeration.ArticleSize;
-import com.storekit.enumeration.ArticleState;
-import com.storekit.model.ArticleEntity;
-import com.storekit.repository.BrandRepository;
 import com.storekit.service.ArticleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,62 +12,34 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/articles")
 @CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class ArticleController {
 
-    @Autowired
-    private ArticleService articleService;
-    @Autowired
-    private BrandRepository brandRepository;
+    private final ArticleService articleService;
+
+    @PostMapping
+    public ResponseEntity<ArticleDTO> createArticle(@RequestBody ArticleDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(articleService.createArticle(dto));
+    }
 
     @GetMapping
-    public List<ArticleEntity> getAll() {
-        return articleService.getAllArticles();
+    public ResponseEntity<List<ArticleDTO>> getAllArticles() {
+        return ResponseEntity.ok(articleService.getAllArticles());
     }
 
     @GetMapping("/{id}")
-    public ArticleEntity getOne(@PathVariable Long id) {
-        return articleService.getArticleById(id);
-    }
-
-    @PostMapping
-    public ArticleEntity create(@RequestBody ArticleDTO.PostInput articleDTO) {
-        ArticleEntity article = new ArticleEntity();
-        // for each field, try to map from DTO to Entity if not null
-        if (articleDTO.getName() != null) {
-            article.setName(articleDTO.getName());
-        }
-        if (articleDTO.getPrice() != null) {
-            article.setPrice(articleDTO.getPrice());
-        }
-        if (articleDTO.getBrandName() != null) {
-            article.setBrand(brandRepository.findByName(articleDTO.getBrandName()));
-        }
-        if (articleDTO.getCategory() != null) {
-            article.setCategory(ArticleCategory.valueOf(articleDTO.getCategory()));
-        }
-        if (articleDTO.getSize() != null) {
-            article.setSize(ArticleSize.valueOf(articleDTO.getSize()));
-        }
-        if (articleDTO.getCondition() != null) {
-            article.setCondition(ArticleCondition.valueOf(articleDTO.getCondition()));
-        }
-        if (articleDTO.getDetailCondition() != null) {
-            article.setDetailCondition(articleDTO.getDetailCondition());
-        }
-        if (articleDTO.getState() != null) {
-            article.setState(ArticleState.valueOf(articleDTO.getState()));
-        }
-
-        return articleService.createArticle(article);
+    public ResponseEntity<ArticleDTO> getArticleById(@PathVariable Long id) {
+        return ResponseEntity.ok(articleService.getArticleById(id));
     }
 
     @PutMapping("/{id}")
-    public ArticleEntity update(@RequestBody ArticleEntity article) {
-        return articleService.updateArticle(article);
+    public ResponseEntity<ArticleDTO> updateArticle(@PathVariable Long id, @RequestBody ArticleDTO dto) {
+        return ResponseEntity.ok(articleService.updateArticle(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
         articleService.deleteArticle(id);
+        return ResponseEntity.noContent().build();
     }
 }

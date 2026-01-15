@@ -1,6 +1,11 @@
 package com.storekit.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.storekit.enumeration.ArticleCategory;
 import com.storekit.enumeration.ArticleCondition;
 import com.storekit.enumeration.ArticleSize;
@@ -8,6 +13,7 @@ import com.storekit.enumeration.ArticleState;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,9 +46,9 @@ public class ArticleEntity {
     @Enumerated(EnumType.STRING)
     private ArticleCategory category;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
-       private BrandEntity brand;
+    private BrandEntity brand;
 
     @Enumerated(EnumType.STRING)
     private ArticleSize size;

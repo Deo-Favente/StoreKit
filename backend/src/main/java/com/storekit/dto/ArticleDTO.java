@@ -1,30 +1,22 @@
 package com.storekit.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.storekit.enumeration.ArticleCategory;
+import com.storekit.enumeration.ArticleCondition;
+import com.storekit.enumeration.ArticleSize;
+import com.storekit.enumeration.ArticleState;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-@AllArgsConstructor
-@Builder
+@Data
 public class ArticleDTO {
-    @Data
-    public static class PostInput {
-        private String name;
-        private Double price;
-        private String brandName;
-        private String category;
-        private String size;
-        private String color;
-        private Integer stock;
-        private String condition;
-        private String detailCondition;
-        private String state;
-    }
-
-    @Data
-    public static class PostOutput {
-        private String message;
-    }
+    private Long id;
+    private String name;
+    private Double price;
+    private ArticleCategory category;
+    private Long brandId;
+    private ArticleSize size;
+    private ArticleCondition condition;
+    private String detailCondition;
+    private ArticleState state;
+    private Integer photoCount;
 }
+

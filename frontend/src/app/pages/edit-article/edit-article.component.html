@@ -79,10 +79,13 @@
 
 <section id="brand" class="my-2 w-full">
     <h2 class="text-md font-semibold text-gray-500">Brand</h2>
-    <select class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" [(ngModel)]="article.brand"
-        (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}">
-        @for (brand of brands; track brand) {
-        <option [value]="brand">{{ brand }}</option>
+    <select 
+        class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" 
+        [(ngModel)]="article.brandId"
+        (ngModelChange)="onArticleChange()" 
+        [ngModelOptions]="{standalone: true}">
+        @for (brand of brands; track brand.id) {
+            <option [ngValue]="brand.id">{{ brand.name }}</option>
         }
     </select>
 </section>

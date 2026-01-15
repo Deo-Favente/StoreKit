@@ -1,19 +1,32 @@
 package com.storekit.controller;
 
+import com.storekit.dto.BrandDTO;
 import com.storekit.model.BrandEntity;
-import com.storekit.repository.BrandRepository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.storekit.service.BrandService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/brands")
+@CrossOrigin(origins = "*")
 public class BrandController {
 
-    public BrandRepository brandRepository;
+    @Autowired
+    public BrandService brandService;
 
-    @PostMapping("/api/brands")
-    public void createBrand(@RequestBody String name) {
+    @PostMapping
+    public BrandEntity createBrand(@RequestBody BrandDTO.PostInput brandDTO) {
         BrandEntity brand = new BrandEntity();
-        brand.setName(name);
-        brandRepository.save(brand);
+        if (brandDTO.getName() != null) {
+            brand.setName(brandDTO.getName());
+        }
+        return brandService.createBrand(brand);
     }
 
+    @GetMapping
+    public List<BrandEntity> getAllBrands() {
+        return brandService.getAllBrands();
+    }
 }

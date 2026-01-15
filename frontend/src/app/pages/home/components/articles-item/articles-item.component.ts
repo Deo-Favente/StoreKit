@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Article } from '@models/article-item.model';
+import { Article } from '@models/article.model';
 import { RouterLink } from "@angular/router";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

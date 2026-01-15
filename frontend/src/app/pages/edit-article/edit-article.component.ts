@@ -5,8 +5,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { ArticleService } from '@services/article.service';
-import { Brand, BrandService } from '@services/brand.service';
-import { Article } from '@models/article-item.model';
+import { BrandService } from '@services/brand.service';
+import { Article } from '@models/article.model';
+import { Brand } from '@models/brand.model';
 import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { PhotoViewerComponent } from '@components/photo-viewer/photo-viewer.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -28,8 +29,7 @@ export class EditArticleComponent implements OnInit {
   conditions = [];
   categories = [];
   sizes = [];
-
-  brands: string[] = [];
+  brands: Brand[] = [];
 
   constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService, private brandService: BrandService, private dialog: MatDialog, private notificationService: NotificationService) { }
 
@@ -57,14 +57,11 @@ export class EditArticleComponent implements OnInit {
         // Charger la description
         this.generateDescription();
       });
-
-      /*
-      // Charger les marques
-      this.brandService.getAllBrands().subscribe((brands: Brand[]) => {
-        this.brands = brands.map(brand => brand.name);
-      });
-      */
     }
+
+    this.brandService.getAllBrands().subscribe((brands: Brand[]) => {
+        this.brands = brands;
+      });
   }
 
   createInitialArticle() {
@@ -73,7 +70,7 @@ export class EditArticleComponent implements OnInit {
       name: '',
       category: null!,
       price: 0,
-      brand: '',
+      brandId: 0,
       size: null!,
       state: null!,
       photoCount: 0,
@@ -113,7 +110,7 @@ export class EditArticleComponent implements OnInit {
   private saveArticle() {
     this.saveState = 'saving';
     this.saveStateText = 'Saving changes...';
-
+    console.log('Sauvegarde de l\'article', this.article);
     if (this.article.id === 0) {
       // Créer un nouvel article
       this.articleService.createArticle(this.article).subscribe({
@@ -123,15 +120,15 @@ export class EditArticleComponent implements OnInit {
           this.saveStateText = 'Changes saved';
           this.generateDescription();
           this.notificationService.showSuccess('Article created successfully');
-          this.router.navigate(['/article', createdArticle.id], { 
-            replaceUrl: true  
+          this.router.navigate(['/article', createdArticle.id], {
+            replaceUrl: true
           });
         },
         error: (err) => {
           this.saveState = 'unsaved';
           this.saveStateText = 'Error creating article';
           console.error(err);
-      }
+        }
       });
 
     } else {
@@ -217,7 +214,7 @@ export class EditArticleComponent implements OnInit {
     // Générer une description simple
     const description = environment.descriptionTemplate
       .replace('{condition}', condition)
-      .replace('{brand}', this.article.brand || '')
+      .replace('{brand}', this.article.brandId?.toString() || '')
       .replace('{category}', category)
       .replace('{size}', size);
 
@@ -225,7 +222,6 @@ export class EditArticleComponent implements OnInit {
   }
 
   copyDescription() {
-
     if (this.article.description) {
       navigator.clipboard.writeText(this.article.description).then(() => {
         console.log('Description copiée dans le presse-papiers');

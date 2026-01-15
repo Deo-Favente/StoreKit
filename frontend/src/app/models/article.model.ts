@@ -3,7 +3,7 @@ export interface Article {
   name: string;
   category: string;
   price: number;
-  brand: string;
+  brandId: number;
   size: string;
   state: number;
   photoCount: number;

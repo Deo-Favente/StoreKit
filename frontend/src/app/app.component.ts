@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from '@components/navbar/navbar.component';
 import { RouterOutlet } from '@angular/router';
 import { OnInit } from '@angular/core';
-import { Article } from '@models/article-item.model';
+import { Article } from '@models/article.model';
 import { ArticleService } from '@services/article.service';
 import { NotificationComponent } from '@components/notification/notification.component';
 

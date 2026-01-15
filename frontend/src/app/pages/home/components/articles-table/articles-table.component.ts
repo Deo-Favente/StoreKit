@@ -1,7 +1,7 @@
-import { ArticleService } from './../../../../services/article.service';
+import { ArticleService } from '@services/article.service';
 import { Component } from '@angular/core';
 import { ArticlesItemComponent } from '../articles-item/articles-item.component';
-import { Article } from '@models/article-item.model';
+import { Article } from '@models/article.model';
 
 @Component({
   selector: 'app-article-table',
