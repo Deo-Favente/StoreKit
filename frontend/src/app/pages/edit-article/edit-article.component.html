@@ -47,7 +47,8 @@
 
 <section id="title" class="my-2 w-full">
     <h2 class="text-md font-semibold text-gray-500">Title</h2>
-    <input type="text" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" [(ngModel)]="article.name"
+    <input type="text" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" maxlength=50
+    [(ngModel)]="article.name"
         (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}" />
 </section>
 

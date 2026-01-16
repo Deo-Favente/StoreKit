@@ -77,6 +77,7 @@ public class ArticleService {
             article.setBrand(brand);
         }
 
+        article.setName(dto.getName());
         article.setPrice(dto.getPrice());
 
         if (dto.getCategory() != null) {

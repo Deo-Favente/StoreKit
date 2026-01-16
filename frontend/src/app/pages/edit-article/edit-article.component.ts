@@ -64,9 +64,9 @@ export class EditArticleComponent implements OnInit {
     }
 
     this.brandService.getAllBrands().subscribe((brands: Brand[]) => {
-        this.brands = brands;
-      });
-    
+      this.brands = brands;
+    });
+
     this.enumService.getConditions().subscribe((conditions: string[]) => {
       this.conditions = conditions;
     });
@@ -177,13 +177,54 @@ export class EditArticleComponent implements OnInit {
   }
 
   addPhoto() {
-    if (this.photos.length < this.maxPhotos) {
-      console.log('Ajouter une photo');
+    if (this.photos.length >= this.maxPhotos) {
+      this.notificationService.showError(`Vous ne pouvez pas ajouter plus de ${this.maxPhotos} photos.`);
+      return;
     }
+
+      // Créer un input invisible pour sélectionner la photo
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.click();
+
+      input.onchange = async () => {
+        if (!input.files || input.files.length === 0) return;
+
+        const file = input.files[0];
+
+        // Créer un FormData pour envoyer le fichier au serveur
+        const formData = new FormData();
+        formData.append('photo', file);
+        formData.append('articleId', this.article.id.toString());
+
+        try {
+          const savedPhotoUrl = await this.articleService.uploadPhoto(this.article.id, formData).toPromise();
+          // Ajouter l'URL de la photo à la liste pour l'affichage
+          if (savedPhotoUrl) {
+            this.photos.push(savedPhotoUrl);
+          } else {
+            console.error('Failed to upload photo: URL is undefined');
+          }
+          this.notificationService.showSuccess('Photo ajoutée avec succès !');
+        } catch (err) {
+          console.error(err);
+          this.notificationService.showError('Erreur lors de l\'ajout de la photo');
+        }
+      };
   }
 
   removePhoto(index: number) {
-    this.photos.splice(index, 1);
+    this.articleService.deletePhoto(this.article.id, index + 1).subscribe({
+      next: () => { 
+        this.photos.splice(index, 1);
+        //this.notificationService.showSuccess('Photo supprimée avec succès !');
+      },
+      error: (err) => {
+        console.error(err);
+        this.notificationService.showError('Erreur lors de la suppression de la photo');
+      } 
+    });
   }
 
   onError(event: Event) {
@@ -234,24 +275,24 @@ export class EditArticleComponent implements OnInit {
       .replace('{category}', category.toLowerCase().replace(/[^a-z]/g, ''))
       .replace('{size}', size)
 
-      if (this.includeDimensions) {
-        description = description.replace('{dimPic}', '(voir dimensions à la fin)');
-      } else {
-        description = description.replace('{dimPic}', '');
-      }
+    if (this.includeDimensions) {
+      description = description.replace('{dimPic}', '(voir dimensions à la fin)');
+    } else {
+      description = description.replace('{dimPic}', '');
+    }
 
-      if (this.includeReturnInfo) {
-        description = description.replace('{retourMessage}', environment.retourMessage);
-      } else {
-        description = description.replace('{retourMessage}', '');
-      }
+    if (this.includeReturnInfo) {
+      description = description.replace('{retourMessage}', environment.retourMessage);
+    } else {
+      description = description.replace('{retourMessage}', '');
+    }
 
-      if (this.includeTags) {
-        description = description.replace('{tags}', environment.hastags);
-      }
-      else {
-        description = description.replace('{tags}', '');
-      }
+    if (this.includeTags) {
+      description = description.replace('{tags}', environment.hastags);
+    }
+    else {
+      description = description.replace('{tags}', '');
+    }
     // put the description in the container with resize
     this.article.description = description;
   }

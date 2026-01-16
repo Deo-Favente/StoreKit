@@ -10,7 +10,7 @@ import { environment } from '../environments/environment';
 export class ArticleService {
   private apiUrl = `${environment.apiUrl}/articles`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllArticles(): Observable<Article[]> {
     return this.http.get<Article[]>(this.apiUrl);
@@ -30,5 +30,13 @@ export class ArticleService {
 
   deleteArticle(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  uploadPhoto(articleId: number, formData: FormData): Observable<string> {
+    return this.http.post<string>(`${this.apiUrl}/photos/${articleId}`, formData);
+  }
+
+  deletePhoto(articleId: number, photoIndex: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/photos/${articleId}/${photoIndex}`);
   }
 }

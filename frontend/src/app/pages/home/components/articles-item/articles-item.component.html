@@ -1,4 +1,8 @@
-<div class="flex flex-row items-center justify-evenly gap-2 py-10 px-2 border-t border-b border-gray-200">
+<div class="flex flex-row items-center justify-evenly gap-6 py-10 px-2 border-t border-b border-gray-200">
+
+    <button class="px-2" (click)="deleteArticle()">
+        <mat-icon class="text-2xl cursor-move">delete</mat-icon>
+    </button>
     @if (article.photoCount > 0) {
     <img src="/img/articles/{{ article.id }}/1.png" (error)="onImageError($event)" alt="{{ article.name }}"
         class="w-20 h-20 object-cover rounded" />
@@ -7,19 +11,21 @@
         class="w-20 h-20 object-cover rounded" />
     }
     <div class="flex flex-col">
-        <h2 class="font-bold">{{ article.name }}</h2>
-        <p>{{ article.id }} - {{ article.price }} €</p>
+        <div>
+            <div class="flex flex-col">
+                <h2 class="font-bold text-wrap wrap-anywhere">{{ article.name }}</h2>
+                <p>{{ article.id }} - {{ article.price }} €</p>
+            </div>
+        </div>
+        <form class="flex items-center justify-center flex-col content-center">
+            <select class="border border-gray-300 rounded px-4 py-2 w-full" [(ngModel)]="article.state"
+                (ngModelChange)="onStateChange()" [ngModelOptions]="{standalone: true}">
+                @for (state of states; track state) {
+                <option [value]="state">{{ state }}</option>
+                }
+            </select>
+        </form>
     </div>
-    <form class="flex items-center justify-center flex-col content-center">
-        <select class="border border-gray-300 rounded px-4 py-2" 
-            [(ngModel)]="article.state"
-            (ngModelChange)="onStateChange()"
-            [ngModelOptions]="{standalone: true}">
-            @for (state of states; track state) {
-            <option [value]="state">{{ state }}</option>
-            }
-        </select>
-    </form>
 
     <a [routerLink]="['/article', article.id]" class="">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
