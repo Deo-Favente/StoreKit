@@ -1,6 +1,6 @@
 <div id="table" class="flex flex-col center outline outline-gray-300 rounded overflow-scroll">
 <!-- Dans le parent -->
 @for (article of articles; track article.id) {
-  <app-articles-item [article]="article" />
+  <app-articles-item [article]="article" [states]="states"></app-articles-item>
 }
 </div>

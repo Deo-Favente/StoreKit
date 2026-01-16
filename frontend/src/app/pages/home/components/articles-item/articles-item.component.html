@@ -11,7 +11,9 @@
         <p>{{ article.id }} - {{ article.price }} €</p>
     </div>
     <form class="flex items-center justify-center flex-col content-center">
-        <select class="border border-gray-300 rounded px-4 py-2" [(ngModel)]="states"
+        <select class="border border-gray-300 rounded px-4 py-2" 
+            [(ngModel)]="article.state"
+            (ngModelChange)="onStateChange()"
             [ngModelOptions]="{standalone: true}">
             @for (state of states; track state) {
             <option [value]="state">{{ state }}</option>
