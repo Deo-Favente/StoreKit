@@ -11,27 +11,11 @@
         <p>{{ article.id }} - {{ article.price }} €</p>
     </div>
     <form class="flex items-center justify-center flex-col content-center">
-        <select class="border border-gray-300 rounded px-4 py-2" [(ngModel)]="article.state"
+        <select class="border border-gray-300 rounded px-4 py-2" [(ngModel)]="states"
             [ngModelOptions]="{standalone: true}">
-            <option [value]="0" class="bg-blue-500">
-                In Stock
-            </option>
-
-            <option [value]="1" class="bg-green-500">
-                Sold
-            </option>''
-
-            <option [value]="2" class="bg-yellow-500">
-                Need Picture
-            </option>
-
-            <option [value]="3" class="bg-red-500">
-                Return Asked
-            </option>
-
-            <option [value]="4" class="bg-gray-500">
-                Unknown
-            </option>
+            @for (state of states; track state) {
+            <option [value]="state">{{ state }}</option>
+            }
         </select>
     </form>
 

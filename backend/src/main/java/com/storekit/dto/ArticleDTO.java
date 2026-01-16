@@ -11,12 +11,12 @@ public class ArticleDTO {
     private Long id;
     private String name;
     private Double price;
-    private ArticleCategory category;
+    private String category;
     private Long brandId;
-    private ArticleSize size;
-    private ArticleCondition condition;
+    private String size;
+    private String condition;
     private String detailCondition;
-    private ArticleState state;
+    private String state;
     private Integer photoCount;
 }
 

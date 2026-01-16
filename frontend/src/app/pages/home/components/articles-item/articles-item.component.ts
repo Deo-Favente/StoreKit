@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 
 export class ArticlesItemComponent {
   @Input() article!: Article;
+  @Input() states!: string[];
 
   onImageError(event: Event) {
     const target = event.target as HTMLImageElement;

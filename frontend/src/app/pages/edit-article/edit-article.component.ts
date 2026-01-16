@@ -14,6 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { EnumService } from '@services/enum.service';
 
 @Component({
   selector: 'app-edit-article',
@@ -26,12 +27,12 @@ export class EditArticleComponent implements OnInit {
   article = {} as Article;
   photos: string[] = [];
   maxPhotos: number = 20;
-  conditions = [];
-  categories = [];
-  sizes = [];
+  conditions: string[] = [];
+  categories: string[] = [];
+  sizes: string[] = [];
   brands: Brand[] = [];
 
-  constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService, private brandService: BrandService, private dialog: MatDialog, private notificationService: NotificationService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService, private brandService: BrandService, private enumService: EnumService, private dialog: MatDialog, private notificationService: NotificationService) { }
 
   ngOnInit() {
     this.subscription = this.articleChanges$
@@ -62,6 +63,17 @@ export class EditArticleComponent implements OnInit {
     this.brandService.getAllBrands().subscribe((brands: Brand[]) => {
         this.brands = brands;
       });
+    
+    this.enumService.getConditions().subscribe((conditions: string[]) => {
+      this.conditions = conditions;
+    });
+
+    this.enumService.getCategories().subscribe((categories: string[]) => {
+      this.categories = categories;
+    });
+    this.enumService.getSizes().subscribe((sizes: string[]) => {
+      this.sizes = sizes;
+    });
   }
 
   createInitialArticle() {

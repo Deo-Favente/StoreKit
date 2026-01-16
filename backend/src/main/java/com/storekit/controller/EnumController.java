@@ -15,22 +15,42 @@ import org.springframework.web.bind.annotation.RestController;
 public class EnumController {
 
     @GetMapping("/categories")
-    public ArticleCategory[] getCategories() {
-        return ArticleCategory.values();
+    public String[] getCategories() {
+        ArticleCategory[] categories = ArticleCategory.values();
+        String[] categoryStrings = new String[categories.length];
+        for (int i = 0; i < categories.length; i++) {
+            categoryStrings[i] = categories[i].toString();
+        }
+        return categoryStrings;
     }
 
     @GetMapping("/sizes")
-    public ArticleSize[] getSizes() {
-        return ArticleSize.values();
+    public String[] getSizes() {
+        ArticleSize[] sizes = ArticleSize.values();
+        String[] sizeStrings = new String[sizes.length];
+        for (int i = 0; i < sizes.length; i++) {
+            sizeStrings[i] = sizes[i].toString();
+        }
+        return sizeStrings;
     }
 
     @GetMapping("/conditions")
-    public ArticleCondition[] getConditions() {
-        return ArticleCondition.values();
+    public String[] getConditions() {
+        ArticleCondition[] conditions = ArticleCondition.values();
+        String[] conditionStrings = new String[conditions.length];
+        for (int i = 0; i < conditions.length; i++) {
+            conditionStrings[i] = conditions[i].toString();
+        }
+        return conditionStrings;
     }
 
     @GetMapping("/states")
-    public ArticleState[] getStates() {
-        return ArticleState.values();
+    public String[] getStates() {
+        ArticleState[] states = ArticleState.values();
+        String[] stateStrings = new String[states.length];
+        for (int i = 0; i < states.length; i++) {
+            stateStrings[i] = states[i].toString();
+        }
+        return stateStrings;
     }
 }
