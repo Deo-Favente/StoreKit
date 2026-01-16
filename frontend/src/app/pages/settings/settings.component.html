@@ -1,0 +1,11 @@
+<div class="h-full w-full flex flex-col gap-20 items-center p-10">
+    <h1 class="text-2xl font-bold">Settings Page</h1>
+
+    <section class="flex items-center justify-center flex-col w-full" id="add-brand">
+        <form class="w-full">
+            <label for="brand-name" class="block mb-2 text-sm font-medium text-gray-900">Add a new brand</label>
+            <input type="text" id="brand-name" name="brand-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 mb-4" placeholder="Brand Name" required [(ngModel)]="newBrandName" [ngModelOptions]="{standalone: true}" />
+            <button type="submit" (click)="createBrand()" class="text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Add Brand</button>
+        </form>
+    </section>
+</div>

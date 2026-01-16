@@ -1,20 +1,19 @@
 <div class="w-full border-t border-green-200 bg-white shrink-0">
     <nav class="flex h-full justify-around">
         <app-navbar-button 
-            route="/home" 
+            route="/stats" 
             icon="leaderboard" 
             label="Stats" 
-        />
+            [selected]="isSelected('/stats')" />
         <app-navbar-button 
-            route="/search" 
+            route="/" 
             icon="search" 
-            label="Search"
-            [selected]="true" 
-        />
+            label="Search" 
+            [selected]="isSelected('/')" />
         <app-navbar-button 
             route="/settings" 
             icon="settings" 
-            label="Settings"
-        />
-    </nav>
+            label="Settings" 
+            [selected]="isSelected('/settings')" />
+        </nav>
 </div>

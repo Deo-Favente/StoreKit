@@ -9,18 +9,16 @@ export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError(error => {
       if (error.status === 0) {
-        notificationService.showError('Impossible de se connecter au serveur');
+        notificationService.showError('Can\'t reach the server');
       } else if (error.status === 404) {
-        notificationService.showError('Ressource introuvable');
+        notificationService.showError('Not found');
       } else if (error.status === 500) {
-        const message = error.error?.detail || 'Erreur serveur';
+        const message = error.error?.detail || 'Server error';
         notificationService.showError(message);
       } else if (error.status === 403) {
-        notificationService.showError('Accès refusé');
-      } else if (error.status === 500) {
-        notificationService.showError('Erreur serveur');
+        notificationService.showError('Access forbidden');
       } else {
-        const message = error.error?.detail || 'Une erreur est survenue';
+        const message = error.error?.detail || 'An error occurred';
         notificationService.showError(message);
       }
       
