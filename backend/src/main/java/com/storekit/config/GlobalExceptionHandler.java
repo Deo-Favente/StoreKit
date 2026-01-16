@@ -1,6 +1,7 @@
 package com.storekit.config;
 
 import com.storekit.model.exception.ArticleCreationException;
+import com.storekit.model.exception.StorageFileNotFoundException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -27,6 +28,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> catchBookCreationException(ArticleCreationException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
+
+    @ExceptionHandler(StorageFileNotFoundException.class)
+    public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+        return ResponseEntity.notFound().build();
     }
 
 }

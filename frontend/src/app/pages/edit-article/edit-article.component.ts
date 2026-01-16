@@ -270,7 +270,6 @@ export class EditArticleComponent implements OnInit {
     // Générer une description simple
     let description = environment.descriptionTemplate
       .replace('{title}', name)
-      .replace('{brand}', this.article.brandId?.toString() || '')
       .replace('{condition}', condition + (detailCondition ? `, ${detailCondition}` : ''))
       .replace('{category}', category.toLowerCase().replace(/[^a-z]/g, ''))
       .replace('{size}', size)
