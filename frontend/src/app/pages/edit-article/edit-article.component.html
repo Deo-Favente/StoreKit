@@ -56,14 +56,14 @@
     <select class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" [(ngModel)]="article.category"
         (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}">
         @for (cat of categories; track cat) {
-        <option [value]="cat" >{{ cat }}</option>
+        <option [value]="cat">{{ cat }}</option>
         }
     </select>
 </section>
 
 <section id="price" class="my-2 w-full">
     <h2 class="text-md font-semibold text-gray-500">Initial Price (€)</h2>
-    <input type="number" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" [(ngModel)]="article.price"
+    <input type="number" step="0.01" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" [(ngModel)]="article.price"
         (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}" />
 </section>
 
@@ -79,13 +79,10 @@
 
 <section id="brand" class="my-2 w-full">
     <h2 class="text-md font-semibold text-gray-500">Brand</h2>
-    <select 
-        class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" 
-        [(ngModel)]="article.brandId"
-        (ngModelChange)="onArticleChange()" 
-        [ngModelOptions]="{standalone: true}">
+    <select class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" [(ngModel)]="article.brandId"
+        (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}">
         @for (brand of brands; track brand.id) {
-            <option [ngValue]="brand.id">{{ brand.name }}</option>
+        <option [ngValue]="brand.id">{{ brand.name }}</option>
         }
     </select>
 </section>
@@ -95,7 +92,7 @@
     <select class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" [(ngModel)]="article.condition"
         (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}">
         @for (state of conditions; track state) {
-        <option [value]="state" >{{ state }}</option>
+        <option [value]="state">{{ state }}</option>
         }
     </select>
 </section>
@@ -110,12 +107,16 @@
     <h2 class="text-md font-semibold text-gray-500">Options</h2>
     <div class="flex flex-col space-y-2">
         <label class="inline-flex items-center">
-            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true" />
+            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true" [(ngModel)]="includeTags" [ngModelOptions]="{standalone: true}" (ngModelChange)="generateDescription()" />
             <span class="ml-2 text-gray-700">Tags</span>
         </label>
-        <label class="inline-flex items-center mb-6">
-            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true" />
+        <label class="inline-flex items-center">
+            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true" [(ngModel)]="includeReturnInfo" [ngModelOptions]="{standalone: true}" (ngModelChange)="generateDescription()" />
             <span class="ml-2 text-gray-700">Return Information</span>
+        </label>
+                <label class="inline-flex items-center mb-6">
+            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true" [(ngModel)]="includeDimensions" [ngModelOptions]="{standalone: true}" (ngModelChange)="generateDescription()" />
+            <span class="ml-2 text-gray-700">Photos with the dimensions at the end</span>
         </label>
     </div>
 </section>
@@ -132,9 +133,7 @@
             <mat-icon fontIcon="content_copy"></mat-icon>
         </button>
     </div>
-    <div class="border border-gray-300 rounded px-4 py-2 mb-6 w-full h-32 resize-none">
-        {{ article.description }}
-    </div>
+    <div class="border border-gray-300 rounded px-4 py-2 mb-6 w-full whitespace-pre-wrap">{{article.description}}</div>
 </section>
 </form>
 </div>

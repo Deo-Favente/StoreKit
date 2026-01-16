@@ -31,6 +31,9 @@ export class EditArticleComponent implements OnInit {
   categories: string[] = [];
   sizes: string[] = [];
   brands: Brand[] = [];
+  includeTags: boolean = true;
+  includeReturnInfo: boolean = true;
+  includeDimensions: boolean = true;
 
   constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService, private brandService: BrandService, private enumService: EnumService, private dialog: MatDialog, private notificationService: NotificationService) { }
 
@@ -224,12 +227,32 @@ export class EditArticleComponent implements OnInit {
     const detailCondition = this.article.detailCondition || '';
 
     // Générer une description simple
-    const description = environment.descriptionTemplate
-      .replace('{condition}', condition)
+    let description = environment.descriptionTemplate
+      .replace('{title}', name)
       .replace('{brand}', this.article.brandId?.toString() || '')
-      .replace('{category}', category)
-      .replace('{size}', size);
+      .replace('{condition}', condition + (detailCondition ? `, ${detailCondition}` : ''))
+      .replace('{category}', category.toLowerCase().replace(/[^a-z]/g, ''))
+      .replace('{size}', size)
 
+      if (this.includeDimensions) {
+        description = description.replace('{dimPic}', '(voir dimensions à la fin)');
+      } else {
+        description = description.replace('{dimPic}', '');
+      }
+
+      if (this.includeReturnInfo) {
+        description = description.replace('{retourMessage}', environment.retourMessage);
+      } else {
+        description = description.replace('{retourMessage}', '');
+      }
+
+      if (this.includeTags) {
+        description = description.replace('{tags}', environment.hastags);
+      }
+      else {
+        description = description.replace('{tags}', '');
+      }
+    // put the description in the container with resize
     this.article.description = description;
   }
 

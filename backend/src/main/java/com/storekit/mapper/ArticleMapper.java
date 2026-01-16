@@ -32,12 +32,12 @@ public class ArticleMapper {
         article.setId(dto.getId());
         article.setName(dto.getName());
         article.setPrice(dto.getPrice());
-        article.setCategory(ArticleCategory.fromValue(dto.getCategory()));
+        if (dto.getCategory() != null) article.setCategory(ArticleCategory.fromValue(dto.getCategory()));
         article.setBrand(brand);
-        article.setSize(ArticleSize.fromValue(dto.getSize()));
-        article.setCondition(ArticleCondition.fromValue(dto.getCondition()));
+        if (dto.getSize() != null) article.setSize(ArticleSize.fromValue(dto.getSize()));
+        if (dto.getCondition() != null) article.setCondition(ArticleCondition.fromValue(dto.getCondition()));
         article.setDetailCondition(dto.getDetailCondition());
-        article.setState(ArticleState.fromValue(dto.getState()));
+        if (dto.getState() != null) article.setState(ArticleState.fromValue(dto.getState()));
         article.setPhotoCount(dto.getPhotoCount());
         return article;
     }
