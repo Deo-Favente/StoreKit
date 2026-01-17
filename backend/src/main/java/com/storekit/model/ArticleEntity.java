@@ -10,6 +10,7 @@ import com.storekit.enumeration.ArticleCategory;
 import com.storekit.enumeration.ArticleCondition;
 import com.storekit.enumeration.ArticleSize;
 import com.storekit.enumeration.ArticleState;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -42,6 +43,8 @@ public class ArticleEntity {
 
     private String name;
     private Double price;
+    @Column(length = 2048)
+    private String description;
 
     @Enumerated(EnumType.STRING)
     private ArticleCategory category;

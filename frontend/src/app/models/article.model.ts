@@ -9,5 +9,5 @@ export interface Article {
   photoCount: number;
   condition: string;
   detailCondition: string;
-  description?: string;
+  description: string;
 }

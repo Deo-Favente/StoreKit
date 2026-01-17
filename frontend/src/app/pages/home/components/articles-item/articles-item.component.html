@@ -1,14 +1,17 @@
 <div class="flex flex-row items-center justify-evenly gap-6 py-10 px-2 border-t border-b border-gray-200">
+    <div class="flex flex-col items-center justify-center gap-6">
+        <button class="px-2" (click)="deleteArticle()">
+            <mat-icon class="text-2xl cursor-move">delete</mat-icon>
+        </button>
+        <button class="px-2" (click)="showExportArticlePopup()">
+            <mat-icon class="text-2xl cursor-move">launch</mat-icon>
+        </button>
+    </div>
 
-    <button class="px-2" (click)="deleteArticle()">
-        <mat-icon class="text-2xl cursor-move">delete</mat-icon>
-    </button>
     @if (article.photoCount > 0) {
-    <img [src]="photoUrl" alt="{{ article.name }}"
-        class="w-20 h-20 object-cover rounded" />
+    <img [src]="photoUrl" alt="{{ article.name }}" class="w-20 h-20 object-cover rounded" />
     } @else {
-    <img src="/img/articles/default.png" alt="{{ article.name }}"
-        class="w-20 h-20 object-cover rounded" />
+    <img src="/img/articles/default.png" alt="{{ article.name }}" class="w-20 h-20 object-cover rounded" />
     }
     <div class="flex flex-col">
         <div>

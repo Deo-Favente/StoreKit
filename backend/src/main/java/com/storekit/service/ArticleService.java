@@ -45,6 +45,7 @@ public class ArticleService {
         ArticleEntity article = new ArticleEntity();
         article.setName(dto.getName());
         article.setPrice(dto.getPrice());
+        article.setDescription(dto.getDescription());
         if (dto.getCategory() != null) article.setCategory(ArticleCategory.fromValue(dto.getCategory()));
         if (dto.getSize() != null) article.setSize(ArticleSize.fromValue(dto.getSize()));
         if (dto.getCondition() != null) article.setCondition(ArticleCondition.fromValue(dto.getCondition()));
@@ -82,6 +83,7 @@ public class ArticleService {
 
         article.setName(dto.getName());
         article.setPrice(dto.getPrice());
+        article.setDescription(dto.getDescription());
 
         if (dto.getCategory() != null) {
             article.setCategory(ArticleCategory.fromValue(dto.getCategory()));

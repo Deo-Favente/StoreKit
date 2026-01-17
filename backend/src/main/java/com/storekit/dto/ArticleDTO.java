@@ -12,6 +12,7 @@ public class ArticleDTO {
     private String name;
     private Double price;
     private String category;
+    private String description;
     private Long brandId;
     private String size;
     private String condition;

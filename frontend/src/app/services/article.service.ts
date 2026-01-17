@@ -51,7 +51,7 @@ export class ArticleService {
       );
   }
 
-  getPhotoUrl(articleId: number, photoNumber: number): string {
+  getPhoto(articleId: number, photoNumber: number): string {
     return `${environment.apiUrl}/articles/${articleId}/photos/${photoNumber}`;
   }
 

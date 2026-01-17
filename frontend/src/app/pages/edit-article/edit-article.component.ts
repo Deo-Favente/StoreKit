@@ -92,6 +92,7 @@ export class EditArticleComponent implements OnInit {
       photoCount: 0,
       condition: null!,
       detailCondition: '',
+      description: ''
     };
     this.photos = [];
   }

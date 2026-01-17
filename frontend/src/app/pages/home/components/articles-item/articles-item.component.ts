@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { ArticleService } from '@services/article.service';
 import { MatIcon } from "@angular/material/icon";
 import { OnInit } from '@angular/core';
+import { NotificationService } from '@app/services/notification.service';
 
 @Component({
   selector: 'app-articles-item',
@@ -17,10 +18,19 @@ export class ArticlesItemComponent implements OnInit {
   @Input() article!: Article;
   @Input() states!: string[];
   photoUrl: string = '';
+  descriptionToCopy: string = '';
 
-  constructor(private articleService: ArticleService) { }
+  constructor(private articleService: ArticleService, private notificationService: NotificationService) {}
   ngOnInit() {
-    this.photoUrl = this.articleService.getPhotoUrl(this.article.id, 1);
+    this.articleService.getPhotos(this.article.id).subscribe({
+      next: (photos) => {
+        this.photoUrl = photos[0] || '';
+        this.descriptionToCopy = this.article.description || '';
+      },
+      error: (err) => {
+        console.error('Error fetching photos:', err);
+      }
+    });
   }
   onStateChange() {
     this.articleService.updateArticle(this.article.id, this.article).subscribe({
@@ -41,4 +51,29 @@ export class ArticlesItemComponent implements OnInit {
       }
     });
   }
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+showExportArticlePopup() {
+  this.copyToClipboardSync(this.descriptionToCopy);
+  window.open('https://www.vinted.fr/items/new', '_blank');
+  this.notificationService.showSuccess('Description copiée ✔');
+}
+
+copyToClipboardSync(text: string) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+
+  document.body.appendChild(textarea);
+  textarea.select();
+
+  try {
+    document.execCommand('copy');
+  } finally {
+    document.body.removeChild(textarea);
+  }
+}
 }
