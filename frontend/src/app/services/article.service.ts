@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
-import { v } from 'node_modules/@angular/cdk/scrolling-module.d-ud2XrbF8';
 
 @Injectable({
   providedIn: 'root'

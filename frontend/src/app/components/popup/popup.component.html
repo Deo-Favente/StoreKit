@@ -1,0 +1,20 @@
+@if (popup) {
+      <div 
+        class="fixed top-10 right-2 z-9999 w-max shadow-lg rounded-lg p-4 flex items-center gap-3 backdrop-blur-sm bg-green-500/90">
+        <span class="flex-1 text-white font-medium">
+          {{ popup.message }}
+        </span>
+
+        <button
+          (click)="makeAction()"
+          class="rounded text-black bg-whit ">
+          {{ popup.actionMessage }}
+        </button>
+        
+        <button 
+          (click)="closeNotification()"
+          class="text-white hover:text-gray-200 transition-colors">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+}

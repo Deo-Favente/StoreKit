@@ -16,15 +16,33 @@ export class ArticleTableComponent {
   constructor(private articleService: ArticleService, private enumService: EnumService) {
     this.loadArticles();
     this.loadStates();
+    //this.addDummyArticle(); // when backend is down
   }
   loadArticles() {
     this.articleService.getAllArticles().subscribe((data) => {
       this.articles = data;
     });
-}
+  }
   loadStates() {
     this.enumService.getStates().subscribe((data) => {
       this.states = data;
     });
   }
-} 
+
+  addDummyArticle() {
+    const newArticle: Article = {
+      id: 0,
+      name: 'Nouvel Article',
+      category: 'Chaussures',
+      price: 0,
+      brandId: 0,
+      size: '',
+      state: 0,
+      photoCount: 0,
+      condition: '',
+      detailCondition: '',
+      description: '',
+    };
+    this.articles.push(newArticle);
+  }
+  } 
