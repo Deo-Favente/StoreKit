@@ -38,6 +38,7 @@ export class EditArticleComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService, private brandService: BrandService, private enumService: EnumService, private dialog: MatDialog, private notificationService: NotificationService) { }
 
   ngOnInit() {
+
     this.subscription = this.articleChanges$
       .pipe(
         debounceTime(1000),
@@ -93,15 +94,6 @@ export class EditArticleComponent implements OnInit {
       detailCondition: '',
     };
     this.photos = [];
-  }
-
-
-  loadArticlePhotos() {
-    const photoCount = this.article.photoCount || 0;
-
-    this.photos = Array.from({ length: photoCount }, (_, i) =>
-      `img/articles/${this.article.id}/photo${i + 1}.png`
-    );
   }
 
   // États de sauvegarde
@@ -176,89 +168,6 @@ export class EditArticleComponent implements OnInit {
     }
   }
 
-  addPhoto() {
-    if (this.photos.length >= this.maxPhotos) {
-      this.notificationService.showError(`Vous ne pouvez pas ajouter plus de ${this.maxPhotos} photos.`);
-      return;
-    }
-
-      // Créer un input invisible pour sélectionner la photo
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-      input.click();
-
-      input.onchange = async () => {
-        if (!input.files || input.files.length === 0) return;
-
-        const file = input.files[0];
-
-        // Créer un FormData pour envoyer le fichier au serveur
-        const formData = new FormData();
-        formData.append('photo', file);
-        formData.append('articleId', this.article.id.toString());
-
-        try {
-          const savedPhotoUrl = await this.articleService.uploadPhoto(this.article.id, formData).toPromise();
-          // Ajouter l'URL de la photo à la liste pour l'affichage
-          if (savedPhotoUrl) {
-            this.photos.push(savedPhotoUrl);
-          } else {
-            console.error('Failed to upload photo: URL is undefined');
-          }
-          this.notificationService.showSuccess('Photo ajoutée avec succès !');
-        } catch (err) {
-          console.error(err);
-          this.notificationService.showError('Erreur lors de l\'ajout de la photo');
-        }
-      };
-  }
-
-  removePhoto(index: number) {
-    this.articleService.deletePhoto(this.article.id, index + 1).subscribe({
-      next: () => { 
-        this.photos.splice(index, 1);
-        //this.notificationService.showSuccess('Photo supprimée avec succès !');
-      },
-      error: (err) => {
-        console.error(err);
-        this.notificationService.showError('Erreur lors de la suppression de la photo');
-      } 
-    });
-  }
-
-  onError(event: Event) {
-    const target = event.target as HTMLImageElement;
-    target.src = '/img/articles/default.png';
-  }
-
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.photos, event.previousIndex, event.currentIndex);
-    console.log('Nouvel ordre:', this.photos);
-  }
-
-  openPhotoViewer(index: number) {
-    this.dialog.open(PhotoViewerComponent, {
-      data: {
-        photos: this.photos,
-        currentIndex: index
-      },
-      maxWidth: '95vw',
-      maxHeight: '80vh',
-      width: '95vw',
-      height: '80vh',
-      panelClass: 'photo-dialog'
-    }).afterClosed().subscribe(result => {
-      if (result?.action === 'delete') {
-        this.removePhoto(result.index);
-      } else if (result?.action === 'setMain') {
-        const mainPhoto = this.photos[result.index];
-        this.photos.splice(result.index, 1);
-        this.photos.unshift(mainPhoto);
-      }
-    });
-  }
-
   generateDescription() {
     // Récupérer les informations nécessaires
     const name = this.article.name || '';
@@ -302,5 +211,158 @@ export class EditArticleComponent implements OnInit {
         console.log('Description copiée dans le presse-papiers');
       });
     }
+  }
+
+  // Charger les photos de l'article
+  loadArticlePhotos() {
+    this.articleService.getPhotos(this.article.id).subscribe((photoNames: string[]) => {
+      this.photos = photoNames; // On ne garde que les noms
+      console.log('Photos chargées:', this.photos);
+    });
+  }
+
+  // Ajouter une photo
+  addPhoto() {
+    if (this.article.id === 0) {
+      this.notificationService.showError('Vous devez d\'abord créer l\'article avant d\'ajouter des photos.');
+      return;
+    }
+
+    if (this.photos.length >= this.maxPhotos) {
+      this.notificationService.showError(`Vous ne pouvez pas ajouter plus de ${this.maxPhotos} photos.`);
+      return;
+    }
+
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.multiple = true;
+    input.click();
+
+    input.onchange = async () => {
+      if (!input.files) return;
+
+      for (let file of Array.from(input.files)) {
+        try {
+          this.articleService.uploadPhoto(this.article.id, file).subscribe({
+            next: () => {
+              this.loadArticlePhotos(); // rafraîchit le tableau depuis le back
+              this.article.photoCount = this.photos.length;
+              this.saveArticle();
+              this.notificationService.showSuccess('Photo ajoutée avec succès !');
+            }
+          });
+        } catch (err) {
+          console.error(err);
+          this.notificationService.showError('Erreur lors de l\'ajout de la photo');
+        }
+      }
+    };
+  }
+
+  // Supprimer une photo par nom
+  removePhoto(photoNumber: number, index: number) {
+
+this.articleService.deletePhoto(this.article.id, this.getNameByIndex(index)).subscribe({
+  next: () => {
+    this.photos.splice(index, 1); // supprime localement pour UX immédiate
+    this.article.photoCount = this.photos.length;
+    this.saveArticle();
+    this.notificationService.showSuccess('Photo supprimée !');
+  },
+  error: (err) => {
+    console.error(err);
+    this.notificationService.showError('Erreur lors de la suppression de la photo');
+  }
+});
+  }
+
+  removePhotoByName(photoName: string) {
+    const index = photoName.replace(/^.*[\\/]/, ''); // Extraire le numéro de la chaîne*
+    const photoNumber = parseInt(index, 10);
+
+    this.removePhoto(photoNumber, parseInt(index, 10) - 1);
+  }
+
+  // Réorganisation des photos par drag & drop
+  drop(event: CdkDragDrop<string[]>) {
+    if (this.photos.length <= 1) return;
+
+    // Met à jour l'ordre localement pour UX instantanée
+    moveItemInArray(this.photos, event.previousIndex, event.currentIndex);
+
+    // Appelle le back pour enregistrer le nouvel ordre
+    this.articleService.switchPhotos(
+      this.article.id,
+      this.getNameByIndex(event.previousIndex),
+      this.getNameByIndex(event.currentIndex)
+    ).subscribe({
+      next: () => {
+        this.article.photoCount = this.photos.length;
+        this.saveArticle();
+        this.notificationService.showSuccess('Photos réorganisées avec succès !');
+      },
+      error: (err) => {
+        console.error(err);
+        this.notificationService.showError('Erreur lors de la réorganisation des photos');
+        // si erreur, on revert l'ordre
+        moveItemInArray(this.photos, event.currentIndex, event.previousIndex);
+      }
+    });
+  }
+  getNameByIndex(index: number): number {
+    const photoName = this.photos[index];
+    const nameOnly = photoName.replace(/^.*[\\/]/, '');
+    return parseInt(nameOnly, 10);
+  }
+
+  // Ouvrir la visionneuse de photos
+  openPhotoViewer(photoName: string) {
+    const currentIndex = this.photos.findIndex(name => name === photoName);
+    if (currentIndex === -1) return;
+
+    this.dialog.open(PhotoViewerComponent, {
+      data: {
+        photos: this.photos,
+        currentIndex
+      },
+      maxWidth: '95vw',
+      maxHeight: '80vh',
+      width: '95vw',
+      height: '80vh',
+      panelClass: 'photo-dialog'
+    }).afterClosed().subscribe(result => {
+      if (result?.action === 'delete') {
+        this.removePhotoByName(result.photoName);
+
+      } else if (result?.action === 'setMain') {
+          const index = this.photos.findIndex(name => name === result.photoName);
+          if (index === -1) return;
+
+          // Mettre à jour localement pour UX immédiate
+          this.photos.splice(index, 1);
+          this.photos.unshift(result.photoName);
+
+          // Appelle le back pour sauvegarder
+          this.articleService.switchPhotos(
+            this.article.id,
+            this.getNameByIndex(0),
+            this.getNameByIndex(index)
+          ).subscribe({
+            next: () => {
+              this.article.photoCount = this.photos.length;
+              this.saveArticle();
+              this.notificationService.showSuccess('Photo principale mise à jour !');
+            },
+            error: (err) => {
+              console.error(err);
+              this.notificationService.showError('Erreur lors de la mise à jour de la photo principale');
+              // revert si erreur
+              this.photos.splice(0, 1);
+              this.photos.splice(index, 0, result.photoName);
+            }
+          });
+        }
+    });
   }
 }

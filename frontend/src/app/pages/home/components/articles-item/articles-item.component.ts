@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ArticleService } from '@services/article.service';
 import { MatIcon } from "@angular/material/icon";
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-articles-item',
@@ -12,17 +13,15 @@ import { MatIcon } from "@angular/material/icon";
   templateUrl: './articles-item.component.html',
 })
 
-export class ArticlesItemComponent {
+export class ArticlesItemComponent implements OnInit {
   @Input() article!: Article;
   @Input() states!: string[];
+  photoUrl: string = '';
 
   constructor(private articleService: ArticleService) { }
-
-  onImageError(event: Event) {
-    const target = event.target as HTMLImageElement;
-    target.src = '/img/articles/default.png';
+  ngOnInit() {
+    this.photoUrl = this.articleService.getPhotoUrl(this.article.id, 1);
   }
-
   onStateChange() {
     this.articleService.updateArticle(this.article.id, this.article).subscribe({
       error: (err) => {

@@ -13,18 +13,17 @@
             </span>
         </div>
 
-        <section id="photos" class="my-2 w-full flex flex-col items-center">
-            <div cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" class="w-full max-w-full
-         flex flex-row gap-2 overflow-x-scroll overflow-y-hidden">
-                @for (photo of photos; track $index) {
-                <div cdkDrag class="relative group shrink-0 w-40 h-40">
-                    <img [src]="photo" [alt]="'Photo ' + ($index + 1)" class="w-40 h-40 object-cover rounded"
-                        (error)="onError($event)" (click)="openPhotoViewer($index)" />
+        <section id="photos" class="my-2 w-full flex flex-col">
+            <div cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)"
+                class="grid grid-cols-2">
 
+                @for (photo of photos; track photo) {
+                <div cdkDrag class="relative group shrink-0 w-40 h-40">
+                    <img [src]="photo" [alt]="'Photo'" class="w-40 h-40 object-cover rounded cursor-pointer"
+                        (click)="openPhotoViewer(photo)" />
                     <div class="absolute top-2 left-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
                         {{ $index + 1 }}
                     </div>
-
                     <div
                         class="absolute top-2 right-2 bg-black bg-opacity-60 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                         <mat-icon class="text-sm">drag_indicator</mat-icon>
@@ -39,7 +38,6 @@
             </div>
             }
 </div>
-
 <p class="text-sm text-gray-500 mt-2">
     {{ photos.length }} / {{ maxPhotos }} photos
 </p>
@@ -48,8 +46,7 @@
 <section id="title" class="my-2 w-full">
     <h2 class="text-md font-semibold text-gray-500">Title</h2>
     <input type="text" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" maxlength=50
-    [(ngModel)]="article.name"
-        (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}" />
+        [(ngModel)]="article.name" (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}" />
 </section>
 
 <section id="category" class="my-2 w-full">
@@ -64,8 +61,8 @@
 
 <section id="price" class="my-2 w-full">
     <h2 class="text-md font-semibold text-gray-500">Initial Price (€)</h2>
-    <input type="number" step="0.01" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" [(ngModel)]="article.price"
-        (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}" />
+    <input type="number" step="0.01" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full"
+        [(ngModel)]="article.price" (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}" />
 </section>
 
 <section id="size" class="my-2 w-full">
@@ -108,15 +105,20 @@
     <h2 class="text-md font-semibold text-gray-500">Options</h2>
     <div class="flex flex-col space-y-2">
         <label class="inline-flex items-center">
-            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true" [(ngModel)]="includeTags" [ngModelOptions]="{standalone: true}" (ngModelChange)="generateDescription()" />
+            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true" [(ngModel)]="includeTags"
+                [ngModelOptions]="{standalone: true}" (ngModelChange)="generateDescription()" />
             <span class="ml-2 text-gray-700">Tags</span>
         </label>
         <label class="inline-flex items-center">
-            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true" [(ngModel)]="includeReturnInfo" [ngModelOptions]="{standalone: true}" (ngModelChange)="generateDescription()" />
+            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true"
+                [(ngModel)]="includeReturnInfo" [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="generateDescription()" />
             <span class="ml-2 text-gray-700">Return Information</span>
         </label>
-                <label class="inline-flex items-center mb-6">
-            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true" [(ngModel)]="includeDimensions" [ngModelOptions]="{standalone: true}" (ngModelChange)="generateDescription()" />
+        <label class="inline-flex items-center mb-6">
+            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true"
+                [(ngModel)]="includeDimensions" [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="generateDescription()" />
             <span class="ml-2 text-gray-700">Photos with the dimensions at the end</span>
         </label>
     </div>
@@ -134,7 +136,8 @@
             <mat-icon fontIcon="content_copy"></mat-icon>
         </button>
     </div>
-    <div class="border border-gray-300 rounded px-4 py-2 mb-6 w-full whitespace-pre-wrap">{{article.description}}</div>
+    <div class="border border-gray-300 rounded px-4 py-2 mb-6 w-full whitespace-pre-wrap">
+        {{article.description}}</div>
 </section>
 </form>
 </div>

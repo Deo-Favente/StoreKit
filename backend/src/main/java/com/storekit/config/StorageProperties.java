@@ -1,10 +1,13 @@
 package com.storekit.config;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class StorageProperties {
     /**
      * Folder location for storing files
      */
-    private String location = "upload-dir";
+    private String location = "data";
 
     public String getLocation() {
         return location;

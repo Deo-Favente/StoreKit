@@ -69,7 +69,7 @@
           "defaultConfiguration": "development",
           "options": {
             "allowedHosts": [
-              "e1ff82433fc8.ngrok-free.app"
+             
             ]
           }
         },

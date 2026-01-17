@@ -12,6 +12,7 @@ import com.storekit.repository.ArticleRepository;
 import com.storekit.repository.BrandRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +20,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ArticleService {
 
+    @Autowired
     private final ArticleRepository articleRepository;
+    @Autowired
     private final BrandRepository brandRepository;
+    @Autowired
     private final ArticleMapper articleMapper;
 
     public ArticleDTO createArticle(ArticleDTO dto) {

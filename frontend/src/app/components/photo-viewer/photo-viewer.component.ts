@@ -24,7 +24,7 @@ export interface PhotoDialogData {
   `]
 })
 export class PhotoViewerComponent {
-  currentIndex: number;
+  currentIndex: number = 0;
   translateX: number = 0;
   isAnimating: boolean = false;
   touchStartX: number = 0;
@@ -59,12 +59,12 @@ export class PhotoViewerComponent {
   }
 
   setAsMainImage() {
-    this.dialogRef.close({ action: 'setMain', index: this.currentIndex });
+    this.dialogRef.close({ action: 'setMain', photoName: this.data.photos[this.currentIndex] });
   }
 
   deletePhoto() {
     /* pas terrible de close ici mais bon */
-    this.dialogRef.close({ action: 'delete', index: this.currentIndex });
+    this.dialogRef.close({ action: 'delete', photoName: this.data.photos[this.currentIndex] });
   }
 
  onTouchStart(event: TouchEvent) {

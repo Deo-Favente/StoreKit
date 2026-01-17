@@ -1,42 +1,77 @@
 import { Article } from '@models/article.model';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
+import { v } from 'node_modules/@angular/cdk/scrolling-module.d-ud2XrbF8';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
-  private apiUrl = `${environment.apiUrl}/articles`;
+  private apiUrlArticles = `${environment.apiUrl}/articles`;
 
   constructor(private http: HttpClient) { }
 
   getAllArticles(): Observable<Article[]> {
-    return this.http.get<Article[]>(this.apiUrl);
+    return this.http.get<Article[]>(this.apiUrlArticles);
   }
 
   getArticle(id: number): Observable<Article> {
-    return this.http.get<Article>(`${this.apiUrl}/${id}`);
+    return this.http.get<Article>(`${this.apiUrlArticles}/${id}`);
   }
 
   createArticle(article: Article): Observable<Article> {
-    return this.http.post<Article>(this.apiUrl, article);
+    return this.http.post<Article>(this.apiUrlArticles, article);
   }
 
   updateArticle(id: number, article: Article): Observable<Article> {
-    return this.http.put<Article>(`${this.apiUrl}/${id}`, article);
+    return this.http.put<Article>(`${this.apiUrlArticles}/${id}`, article);
   }
 
   deleteArticle(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrlArticles}/${id}`);
   }
 
-  uploadPhoto(articleId: number, formData: FormData): Observable<string> {
-    return this.http.post<string>(`${this.apiUrl}/photos/${articleId}`, formData);
+  uploadPhoto(articleId: number, file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post(`${this.apiUrlArticles}/${articleId}/photos`, formData, {
+      responseType: 'text'
+    }).pipe(
+      map(url => this.getFullPhotoUrl(url))
+    );
   }
 
-  deletePhoto(articleId: number, photoIndex: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/photos/${articleId}/${photoIndex}`);
+  getPhotos(articleId: number): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrlArticles}/${articleId}/photos`)
+      .pipe(
+        map(urls => urls.map(url => this.getFullPhotoUrl(url)))
+      );
+  }
+
+  getPhotoUrl(articleId: number, photoNumber: number): string {
+    return `${environment.apiUrl}/articles/${articleId}/photos/${photoNumber}`;
+  }
+
+  deletePhoto(articleId: number, photoNumber: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrlArticles}/${articleId}/photos/${photoNumber}`);
+  }
+
+  private getFullPhotoUrl(relativeUrl: string): string {
+    // Si l'URL commence par /api, on ajoute juste la base URL
+    if (relativeUrl.startsWith('/api')) {
+      return `${environment.apiUrl.replace('/api', '')}${relativeUrl}`;
+    }
+    // Sinon on considère que c'est déjà une URL complète
+    return relativeUrl;
+  }
+
+  switchPhotos(articleId: number, photoNumber1: number, photoNumber2: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrlArticles}/${articleId}/photos/switch`, {
+      number1: photoNumber1,
+      number2: photoNumber2
+    });
   }
 }

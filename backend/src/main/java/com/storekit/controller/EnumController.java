@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/enums")
-@CrossOrigin(origins = "*")
 public class EnumController {
 
     @GetMapping("/categories")
