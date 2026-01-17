@@ -101,28 +101,28 @@
         placeholder="Some scratches on the back..." />
 </section>
 
+<!--
 <section id="options" class="my-2">
     <h2 class="text-md font-semibold text-gray-500">Options</h2>
     <div class="flex flex-col space-y-2">
         <label class="inline-flex items-center">
-            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true" [(ngModel)]="includeTags"
-                [ngModelOptions]="{standalone: true}" (ngModelChange)="generateDescription()" />
+            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" [(ngModel)]="includeTags"
+                [ngModelOptions]="{standalone: true}" (ngModelChange)="onArticleChange()" />
             <span class="ml-2 text-gray-700">Tags</span>
         </label>
         <label class="inline-flex items-center">
-            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true"
-                [(ngModel)]="includeReturnInfo" [ngModelOptions]="{standalone: true}"
-                (ngModelChange)="generateDescription()" />
+            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" [(ngModel)]="includeReturnInfo"
+                [ngModelOptions]="{standalone: true}" (ngModelChange)="onArticleChange()" />
             <span class="ml-2 text-gray-700">Return Information</span>
         </label>
         <label class="inline-flex items-center mb-6">
-            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked="true"
-                [(ngModel)]="includeDimensions" [ngModelOptions]="{standalone: true}"
-                (ngModelChange)="generateDescription()" />
+            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" [(ngModel)]="includeDimensions"
+                [ngModelOptions]="{standalone: true}" (ngModelChange)="onArticleChange()" />
             <span class="ml-2 text-gray-700">Photos with the dimensions at the end</span>
         </label>
     </div>
 </section>
+-->
 
 <section id="description" class="my-2">
     <div class="flex justify-between items-center">

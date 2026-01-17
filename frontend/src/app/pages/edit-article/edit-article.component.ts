@@ -32,7 +32,7 @@ export class EditArticleComponent implements OnInit {
   sizes: string[] = [];
   brands: Brand[] = [];
   includeTags: boolean = true;
-  includeReturnInfo: boolean = true;
+  includeReturnInfo: boolean = false;
   includeDimensions: boolean = true;
 
   constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService, private brandService: BrandService, private enumService: EnumService, private dialog: MatDialog, private notificationService: NotificationService) { }
