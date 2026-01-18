@@ -41,7 +41,9 @@ export class ArticleTableComponent {
       photoCount: 0,
       condition: '',
       detailCondition: '',
-      description: '',
+      hashTags: true,
+      returnInfos: true,
+      dimensionPics: true
     };
     this.articles.push(newArticle);
   }

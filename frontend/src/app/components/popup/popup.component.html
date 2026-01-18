@@ -7,7 +7,9 @@
   <span class="flex-1 text-white font-sm mt-8">
     {{ popup.message }}
   </span>
-
   <button (click)="makeAction()" class="rounded bg-white text-black px-6 py-2">{{ popup.actionMessage }}</button>
+  @if(popup.actionMessage2) {
+  <button (click)="makeAction2()" class="rounded bg-white text-black px-6 py-2">{{ popup.actionMessage2 }}</button>
+  }
 </div>
 }

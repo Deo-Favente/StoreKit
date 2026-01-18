@@ -15,7 +15,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")       // endpoints
-                        .allowedOrigins("https://3cd23c5616d2.ngrok-free.app") // ton Angular
+                        .allowedOrigins("http://192.168.1.248:4200/") // ton Angular
                         .allowedMethods("GET", "POST", "DELETE", "PUT", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

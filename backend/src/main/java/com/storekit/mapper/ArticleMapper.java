@@ -17,6 +17,9 @@ public class ArticleMapper {
         dto.setId(article.getId());
         dto.setName(article.getName());
         dto.setPrice(article.getPrice());
+        dto.setReturnInfos(article.isReturnInfos());
+        dto.setHashTags(article.isHashTags());
+        dto.setDimensionPics(article.isDimensionPics());
         if (article.getCategory() != null) dto.setCategory(article.getCategory().getValue());
         if (article.getBrand() != null) dto.setBrandId(article.getBrand().getId());
         if (article.getSize() != null) dto.setSize(article.getSize().getValue());
@@ -32,6 +35,9 @@ public class ArticleMapper {
         article.setId(dto.getId());
         article.setName(dto.getName());
         article.setPrice(dto.getPrice());
+        article.setReturnInfos(dto.isReturnInfos());
+        article.setHashTags(dto.isHashTags());
+        article.setDimensionPics(dto.isDimensionPics());
         if (dto.getCategory() != null) article.setCategory(ArticleCategory.fromValue(dto.getCategory()));
         article.setBrand(brand);
         if (dto.getSize() != null) article.setSize(ArticleSize.fromValue(dto.getSize()));

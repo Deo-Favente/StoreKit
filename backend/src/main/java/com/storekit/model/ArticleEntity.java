@@ -43,8 +43,6 @@ public class ArticleEntity {
 
     private String name;
     private Double price;
-    @Column(length = 2048)
-    private String description;
 
     @Enumerated(EnumType.STRING)
     private ArticleCategory category;
@@ -65,4 +63,7 @@ public class ArticleEntity {
     private ArticleState state = ArticleState.IN_STOCK;
 
     private Integer photoCount;
+    private boolean hashTags;
+    private boolean dimensionPics;
+    private boolean returnInfos;
 }

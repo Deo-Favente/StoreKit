@@ -12,12 +12,14 @@ public class ArticleDTO {
     private String name;
     private Double price;
     private String category;
-    private String description;
     private Long brandId;
     private String size;
     private String condition;
     private String detailCondition;
     private String state;
     private Integer photoCount;
+    private boolean hashTags;
+    private boolean dimensionPics;
+    private boolean returnInfos;
 }
 

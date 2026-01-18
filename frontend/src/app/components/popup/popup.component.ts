@@ -33,4 +33,13 @@ export class PopUpComponent implements OnInit {
     // Fermeture normale : passer à la popup suivante
     this.PopUpService.closePopUp();
   }
+
+  async makeAction2() {
+    if (this.popup?.action2) {
+      await this.popup.action2();
+    }
+    this.popup = null;
+    // Fermeture normale : passer à la popup suivante
+    this.PopUpService.closePopUp();
+  }
 }

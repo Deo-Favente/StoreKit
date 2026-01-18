@@ -9,5 +9,8 @@ export interface Article {
   photoCount: number;
   condition: string;
   detailCondition: string;
-  description: string;
+  //description: string;
+  hashTags: boolean;
+  returnInfos: boolean;
+  dimensionPics: boolean;
 }

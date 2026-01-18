@@ -32,9 +32,9 @@ public class ArticleService {
 
     public ArticleDTO createArticle(ArticleDTO dto) {
 
-        if (dto.getName() == null || dto.getName().isBlank()) {
+        /*if (dto.getName() == null || dto.getName().isBlank()) {
             throw new IllegalArgumentException("Name is required");
-        }
+        }**/
 
         BrandEntity brand = null;
         if (dto.getBrandId() != null) {
@@ -45,7 +45,9 @@ public class ArticleService {
         ArticleEntity article = new ArticleEntity();
         article.setName(dto.getName());
         article.setPrice(dto.getPrice());
-        article.setDescription(dto.getDescription());
+        article.setReturnInfos(dto.isReturnInfos());
+        article.setHashTags(dto.isHashTags());
+        article.setDimensionPics(dto.isDimensionPics());
         if (dto.getCategory() != null) article.setCategory(ArticleCategory.fromValue(dto.getCategory()));
         if (dto.getSize() != null) article.setSize(ArticleSize.fromValue(dto.getSize()));
         if (dto.getCondition() != null) article.setCondition(ArticleCondition.fromValue(dto.getCondition()));
@@ -83,7 +85,9 @@ public class ArticleService {
 
         article.setName(dto.getName());
         article.setPrice(dto.getPrice());
-        article.setDescription(dto.getDescription());
+        article.setReturnInfos(dto.isReturnInfos());
+        article.setHashTags(dto.isHashTags());
+        article.setDimensionPics(dto.isDimensionPics());
 
         if (dto.getCategory() != null) {
             article.setCategory(ArticleCategory.fromValue(dto.getCategory()));

@@ -1,4 +1,11 @@
 <div class="flex flex-col p-10">
+        <a routerLink="/">
+        <button
+            class="bg-white text-green-500 font-bold py-2 px-4 rounded flex items-center gap-2">
+            <mat-icon>arrow_back</mat-icon>
+            Back
+        </button>
+    </a>
     <form action="">
         <div class="flex items-center justify-between">
             @if (article.id == 0) {
@@ -45,7 +52,7 @@
 
 <section id="title" class="my-2 w-full">
     <h2 class="text-md font-semibold text-gray-500">Title</h2>
-    <input type="text" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" maxlength=50
+    <input type="text" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" maxlength=50 placeholder="Ex : Vintage Adidas Jacket..."
         [(ngModel)]="article.name" (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}" />
 </section>
 
@@ -60,8 +67,8 @@
 </section>
 
 <section id="price" class="my-2 w-full">
-    <h2 class="text-md font-semibold text-gray-500">Initial Price (€)</h2>
-    <input type="number" step="0.01" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full"
+    <h2 class="text-md font-semibold text-gray-500">Actual Price (€)</h2>
+    <input type="number" step="0.01" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full" placeholder="Ex : 9.99"
         [(ngModel)]="article.price" (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}" />
 </section>
 
@@ -98,31 +105,29 @@
     <h3 class="text-md font-semibold text-gray-500">Describe the condition in detail</h3>
     <input type="text" class="border border-gray-300 rounded px-4 py-2 mb-6 w-full"
         [(ngModel)]="article.detailCondition" (ngModelChange)="onArticleChange()" [ngModelOptions]="{standalone: true}"
-        placeholder="Some scratches on the back..." />
+        placeholder="Ex : Some scratches on the back..." />
 </section>
 
-<!--
 <section id="options" class="my-2">
     <h2 class="text-md font-semibold text-gray-500">Options</h2>
     <div class="flex flex-col space-y-2">
         <label class="inline-flex items-center">
-            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" [(ngModel)]="includeTags"
-                [ngModelOptions]="{standalone: true}" (ngModelChange)="onArticleChange()" />
+            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" [(ngModel)]="article.hashTags"
+                [ngModelOptions]="{standalone: true}" (ngModelChange)="onArticleChange()" [checked]="article.hashTags" />
             <span class="ml-2 text-gray-700">Tags</span>
         </label>
         <label class="inline-flex items-center">
-            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" [(ngModel)]="includeReturnInfo"
-                [ngModelOptions]="{standalone: true}" (ngModelChange)="onArticleChange()" />
+            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" [(ngModel)]="article.returnInfos"
+                [ngModelOptions]="{standalone: true}" (ngModelChange)="onArticleChange()" [checked]="article.returnInfos" />
             <span class="ml-2 text-gray-700">Return Information</span>
         </label>
         <label class="inline-flex items-center mb-6">
-            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" [(ngModel)]="includeDimensions"
-                [ngModelOptions]="{standalone: true}" (ngModelChange)="onArticleChange()" />
+            <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" [(ngModel)]="article.dimensionPics"
+                [ngModelOptions]="{standalone: true}" (ngModelChange)="onArticleChange()" [checked]="article.dimensionPics" />
             <span class="ml-2 text-gray-700">Photos with the dimensions at the end</span>
         </label>
     </div>
 </section>
--->
 
 <section id="description" class="my-2">
     <div class="flex justify-between items-center">
@@ -137,7 +142,7 @@
         </button>
     </div>
     <div class="border border-gray-300 rounded px-4 py-2 mb-6 w-full whitespace-pre-wrap">
-        {{article.description}}</div>
+        {{this.description}}</div>
 </section>
 </form>
 </div>

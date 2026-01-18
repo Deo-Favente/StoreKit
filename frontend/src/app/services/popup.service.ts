@@ -5,6 +5,8 @@ export interface PopUp {
   message: string;
   actionMessage: string;
   action: () => Promise<void>;
+  actionMessage2?: string;
+  action2?: () => Promise<void>;
 }
 
 @Injectable({

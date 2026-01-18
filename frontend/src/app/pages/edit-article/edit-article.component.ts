@@ -1,7 +1,7 @@
 import { PopUpService } from './../../services/popup.service';
 import { NotificationService } from '@services/notification.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,7 +20,7 @@ import { EnumService } from '@services/enum.service';
 @Component({
   selector: 'app-edit-article',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, DragDropModule],
+  imports: [CommonModule, FormsModule, MatIconModule, DragDropModule, RouterLink],
   templateUrl: './edit-article.component.html'
 })
 
@@ -32,9 +32,7 @@ export class EditArticleComponent implements OnInit {
   categories: string[] = [];
   sizes: string[] = [];
   brands: Brand[] = [];
-  includeTags: boolean = true;
-  includeReturnInfo: boolean = false;
-  includeDimensions: boolean = true;
+  description: string = '';
 
   constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService, private brandService: BrandService, private enumService: EnumService, private dialog: MatDialog, private notificationService: NotificationService, private popUpService: PopUpService) { }
 
@@ -62,6 +60,7 @@ export class EditArticleComponent implements OnInit {
         this.loadArticlePhotos();
         // Charger la description
         this.generateDescription();
+        console.log('Article chargé:', this.article);
       });
     }
 
@@ -93,7 +92,9 @@ export class EditArticleComponent implements OnInit {
       photoCount: 0,
       condition: null!,
       detailCondition: '',
-      description: ''
+      hashTags: true,
+      returnInfos: true,
+      dimensionPics: true  
     };
     this.photos = [];
   }
@@ -179,37 +180,37 @@ export class EditArticleComponent implements OnInit {
     const detailCondition = this.article.detailCondition || '';
 
     // Générer une description simple
-    let description = environment.descriptionTemplate
+    this.description = environment.descriptionTemplate
       .replace('{title}', name)
       .replace('{condition}', condition + (detailCondition ? `, ${detailCondition}` : ''))
       .replace('{category}', category.toLowerCase().replace(/[^a-z]/g, ''))
       .replace('{size}', size)
 
-    if (this.includeDimensions) {
-      description = description.replace('{dimPic}', '(voir dimensions à la fin)');
+    if (this.article.dimensionPics) {
+      this.description = this.description.replace('{dimPic}', '(voir dimensions à la fin)');
     } else {
-      description = description.replace('{dimPic}', '');
+      this.description = this.description.replace('{dimPic}', '');
     }
 
-    if (this.includeReturnInfo) {
-      description = description.replace('{retourMessage}', environment.retourMessage);
+    if (this.article.returnInfos) {
+      this.description = this.description.replace('{retourMessage}', environment.retourMessage);
     } else {
-      description = description.replace('{retourMessage}', '');
+      this.description = this.description.replace('{retourMessage}', '');
     }
 
-    if (this.includeTags) {
-      description = description.replace('{tags}', environment.hastags);
+    if (this.article.hashTags) {
+      this.description = this.description.replace('{tags}', environment.hastags);
     }
     else {
-      description = description.replace('{tags}', '');
+      this.description = this.description.replace('{tags}', '');
     }
     // put the description in the container with resize
-    this.article.description = description;
+    //this.description = description;
   }
 
   copyDescription() {
-    if (this.article.description) {
-      navigator.clipboard.writeText(this.article.description).then(() => {
+    if (this.description) {
+      navigator.clipboard.writeText(this.description).then(() => {
         console.log('Description copiée dans le presse-papiers');
       });
     }
@@ -236,13 +237,14 @@ export class EditArticleComponent implements OnInit {
     }
 
     const result = await this.popUpService.showPopUp({message: 'Redirecting... Close to upload manually.', actionMessage: 'Open shortcut (IOS)', action: async () => { 
-      window.open("shortcuts://run-shortcut?name=StoreKit%20-%20Take%20pics&input=text&text=" + this.article.id, '_blank');
+      window.open("shortcuts://run-shortcut?name=StoreKit%20-%20Take%20pics&input=text&text=" + this.article.id, '_blank')} , actionMessage2: 'Upload manually', action2: async () => { this.openPhotoImport();
     }});
     if (result) {
       this.loadArticlePhotos();
-      return;
     }
+  }
 
+  openPhotoImport() {
     const input = document.createElement('input');  
     input.type = 'file';
     input.accept = 'image/*';
