@@ -73,7 +73,7 @@ public class FileUploadController {
     /**
      * POST /api/articles/{id}/photos - Upload une nouvelle photo pour un article
      */
-    @PostMapping("/{id}/photos")
+    @PostMapping(value= "/{id}/photos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file,
                                                    @PathVariable Long id) {
         try {
