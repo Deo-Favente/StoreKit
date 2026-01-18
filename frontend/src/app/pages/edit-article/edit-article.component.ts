@@ -1,3 +1,4 @@
+import { PopUpService } from './../../services/popup.service';
 import { NotificationService } from '@services/notification.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -35,7 +36,7 @@ export class EditArticleComponent implements OnInit {
   includeReturnInfo: boolean = false;
   includeDimensions: boolean = true;
 
-  constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService, private brandService: BrandService, private enumService: EnumService, private dialog: MatDialog, private notificationService: NotificationService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService, private brandService: BrandService, private enumService: EnumService, private dialog: MatDialog, private notificationService: NotificationService, private popUpService: PopUpService) { }
 
   ngOnInit() {
 
@@ -223,18 +224,26 @@ export class EditArticleComponent implements OnInit {
   }
 
   // Ajouter une photo
-  addPhoto() {
+  async addPhoto() {
     if (this.article.id === 0) {
-      this.notificationService.showError('Vous devez d\'abord créer l\'article avant d\'ajouter des photos.');
+      this.notificationService.showError('You must save the article before adding photos.');
       return;
     }
 
     if (this.photos.length >= this.maxPhotos) {
-      this.notificationService.showError(`Vous ne pouvez pas ajouter plus de ${this.maxPhotos} photos.`);
+      this.notificationService.showError(`Maximum of ${this.maxPhotos} photos reached.`);
       return;
     }
 
-    const input = document.createElement('input');
+    const result = await this.popUpService.showPopUp({message: 'Redirecting... Close to upload manually.', actionMessage: 'Open shortcut (IOS)', action: async () => { 
+      window.open("shortcuts://run-shortcut?name=StoreKit%20-%20Take%20pics&input=text&text=" + this.article.id, '_blank');
+    }});
+    if (result) {
+      this.loadArticlePhotos();
+      return;
+    }
+
+    const input = document.createElement('input');  
     input.type = 'file';
     input.accept = 'image/*';
     input.multiple = true;
@@ -243,20 +252,20 @@ export class EditArticleComponent implements OnInit {
     input.onchange = async () => {
       if (!input.files) return;
 
-      for (let file of Array.from(input.files)) {
-        try {
-          this.articleService.uploadPhoto(this.article.id, file).subscribe({
-            next: () => {
-              this.loadArticlePhotos(); // rafraîchit le tableau depuis le back
-              this.article.photoCount = this.photos.length;
-              this.saveArticle();
-              this.notificationService.showSuccess('Photo ajoutée avec succès !');
-            }
-          });
-        } catch (err) {
-          console.error(err);
-          this.notificationService.showError('Erreur lors de l\'ajout de la photo');
-        }
+      const files = Array.from(input.files);
+      const uploadPromises = files.map(file => 
+      this.articleService.uploadPhoto(this.article.id, file).toPromise()
+      );
+
+      try {
+      await Promise.all(uploadPromises);
+      this.loadArticlePhotos(); // Refresh the photo list from the backend
+      this.article.photoCount = this.photos.length; 
+      this.saveArticle();
+      this.notificationService.showSuccess('Photos ajoutées avec succès !');
+      } catch (err) {
+      console.error(err);
+      this.notificationService.showError('Erreur lors de l\'ajout des photos');
       }
     };
   }

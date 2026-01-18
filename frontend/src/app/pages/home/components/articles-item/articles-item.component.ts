@@ -116,8 +116,8 @@ export class ArticlesItemComponent implements OnInit {
   }
 
   async extractPhotos() {
-    const shortcutUrl = 'shortcuts://run-shortcut?name=TheFlowRush&input=text&text=' + 
-      encodeURIComponent(`article_${this.article.id}_photos.zip`);
+    const shortcutUrl = 'shortcuts://run-shortcut?name=StoreKit%20-%20Save%20pics&input=text&text=' + 
+      encodeURIComponent(`article_${this.article.id}_photos`);
     window.open(shortcutUrl, '_blank');
   }
 }
