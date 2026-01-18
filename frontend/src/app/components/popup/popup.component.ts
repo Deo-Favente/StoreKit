@@ -4,7 +4,7 @@ import { PopUpService, PopUp } from '@services/popup.service';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-notification',
+  selector: 'app-popup',
   imports: [MatIconModule],
   templateUrl: './popup.component.html'
 })
@@ -21,12 +21,16 @@ export class PopUpComponent implements OnInit {
 
   closeNotification() {
     this.popup = null;
+    // Fermeture sans continuer la séquence (annulation)
+    this.PopUpService.cancelPopUpSequence();
   }
 
-  makeAction() {
+  async makeAction() {
     if (this.popup?.action) {
-      this.popup.action();
+      await this.popup.action();
     }
-    this.closeNotification();
+    this.popup = null;
+    // Fermeture normale : passer à la popup suivante
+    this.PopUpService.closePopUp();
   }
 }

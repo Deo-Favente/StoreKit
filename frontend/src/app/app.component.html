@@ -1,11 +1,12 @@
 <div class="flex flex-col h-screen">
     
     <!-- Contenu scrollable avec padding pour éviter le chevauchement -->
-    <main class="flex-1 overflow-y-auto pb-16">
+    <main class="flex-1 overflow-y-auto pb-16" id="app-home">
         <router-outlet></router-outlet>
     </main>
     
     <!-- Navbar fixe en bas -->
     <app-navbar class="fixed bottom-0 left-0 right-0 z-50"/>
     <app-notification />
+    <app-popup />
 </div>

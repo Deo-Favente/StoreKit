@@ -16,7 +16,7 @@ export class ArticleTableComponent {
   constructor(private articleService: ArticleService, private enumService: EnumService) {
     this.loadArticles();
     this.loadStates();
-    //this.addDummyArticle(); // when backend is down
+    this.addDummyArticle(); // when backend is down
   }
   loadArticles() {
     this.articleService.getAllArticles().subscribe((data) => {

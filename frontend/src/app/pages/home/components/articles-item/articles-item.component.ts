@@ -14,7 +14,6 @@ import JSZip from 'jszip';
   imports: [RouterLink, CommonModule, FormsModule, MatIcon],
   templateUrl: './articles-item.component.html',
 })
-
 export class ArticlesItemComponent implements OnInit {
   @Input() article!: Article;
   @Input() states!: string[];
@@ -22,6 +21,7 @@ export class ArticlesItemComponent implements OnInit {
   descriptionToCopy: string = '';
 
   constructor(private articleService: ArticleService, private popupService: PopUpService) { }
+
   ngOnInit() {
     this.articleService.getPhotos(this.article.id).subscribe({
       next: (photos) => {
@@ -32,8 +32,8 @@ export class ArticlesItemComponent implements OnInit {
         console.error('Error fetching photos:', err);
       }
     });
-    //this.showExportArticlePopup();
   }
+
   onStateChange() {
     this.articleService.updateArticle(this.article.id, this.article).subscribe({
       error: (err) => {
@@ -45,7 +45,6 @@ export class ArticlesItemComponent implements OnInit {
   deleteArticle() {
     this.articleService.deleteArticle(this.article.id).subscribe({
       next: () => {
-        // refresh the page or remove the article from the list
         window.location.reload();
       },
       error: (err) => {
@@ -53,37 +52,52 @@ export class ArticlesItemComponent implements OnInit {
       }
     });
   }
+
   delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  showExportArticlePopup() {
-    this.popupService.showPopUp({ message: 'Etape 1 : Télécharger les photos', action: () => this.downloadAllPhotos(), actionMessage: 'Télécharger (.zip)' });
-    this.popupService.showPopUp({ message: 'Etape 2 : Extraction des photos dans le dossier "TheFlowRush".', action: () => this.extractPhotos(), actionMessage: 'Extraire (raccourci iOS)' });
-    this.popupService.showPopUp({ message: 'Etape 3 : Copie de la description dans le presse-papiers.', action: () => this.copyToClipboardSync(this.descriptionToCopy), actionMessage: 'Copier' });
-    this.popupService.showPopUp({ message: 'Etape 4 : Ouverture de Vinted', action: () => window.open('https://www.vinted.fr/items/new', '_blank'), actionMessage: 'Ouvrir Vinted' });
+  async showExportArticlePopup() {
+    // Étape 1 : Télécharger les photos
+    const step1 = await this.popupService.showPopUp({ 
+      message: 'Etape 1 : Download all photos',
+      action: () => this.downloadAllPhotos(),
+      actionMessage: 'Download (.zip)' 
+    });
+    if (!step1) return; // Arrêter si l'utilisateur annule
+
+    // Étape 2 : Extraction des photos
+    const step2 = await this.popupService.showPopUp({ 
+      message: 'Etape 2 : Extract photos in the "TheFlowRush" album.',
+      action: () => this.extractPhotos(), 
+      actionMessage: 'Extract (iOS shortcut)' 
+    });
+    if (!step2) return;
+
+    // Étape 3 : Copie de la description
+    const step3 = await this.popupService.showPopUp({ 
+      message: 'Etape 3 : Copy the description.',
+      action: () => this.copyToClipboard(this.descriptionToCopy), 
+      actionMessage: 'Copy'
+    });
+    if (!step3) return;
+
+    // Étape 4 : Ouverture de Vinted
+    await this.popupService.showPopUp({ 
+      message: 'Etape 4 : Open Vinted to create a new listing.',
+      action: async () => { window.open('https://www.vinted.fr/items/new', '_blank'); }, 
+      actionMessage: 'Open Vinted' 
+    });
   }
 
-  copyToClipboardSync(text: string) {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-
-    document.body.appendChild(textarea);
-    textarea.select();
-
-    try {
-      document.execCommand('copy');
-    } finally {
-      document.body.removeChild(textarea);
-    }
+  async copyToClipboard(text: string) {
+    await navigator.clipboard.writeText(text);
   }
 
   async downloadAllPhotos() {
-    // put all files in a zip and download it
     const zip = new JSZip();
     const photos = await this.articleService.getPhotos(this.article.id).toPromise();
+    
     if (photos) {
       for (let i = 0; i < photos.length; i++) {
         const photoUrl = photos[i];
@@ -91,6 +105,7 @@ export class ArticlesItemComponent implements OnInit {
         const blob = await response.blob();
         zip.file(`photo_${i + 1}.jpg`, blob);
       }
+      
       const content = await zip.generateAsync({ type: 'blob' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(content);
@@ -101,8 +116,8 @@ export class ArticlesItemComponent implements OnInit {
   }
 
   async extractPhotos() {
-    // Open the iphone shortuct 
-    const shortcutUrl = 'shortcuts://run-shortcut?name=TheFlowRush&input=text&text=' + encodeURIComponent(`article_${this.article.id}_photos.zip`);
+    const shortcutUrl = 'shortcuts://run-shortcut?name=TheFlowRush&input=text&text=' + 
+      encodeURIComponent(`article_${this.article.id}_photos.zip`);
     window.open(shortcutUrl, '_blank');
   }
 }
