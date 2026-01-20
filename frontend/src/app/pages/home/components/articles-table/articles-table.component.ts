@@ -37,13 +37,15 @@ export class ArticleTableComponent {
       price: 0,
       brandId: 0,
       size: '',
+      detailSize: '',
       state: 0,
       photoCount: 0,
       condition: '',
       detailCondition: '',
       hashTags: true,
       returnInfos: true,
-      dimensionPics: true
+      dimensionPics: true,
+      emojis: true
     };
     this.articles.push(newArticle);
   }

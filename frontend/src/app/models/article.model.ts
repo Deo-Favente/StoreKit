@@ -5,6 +5,7 @@ export interface Article {
   price: number;
   brandId: number;
   size: string;
+  detailSize: string;
   state: number;
   photoCount: number;
   condition: string;
@@ -13,4 +14,5 @@ export interface Article {
   hashTags: boolean;
   returnInfos: boolean;
   dimensionPics: boolean;
+  emojis: boolean;
 }

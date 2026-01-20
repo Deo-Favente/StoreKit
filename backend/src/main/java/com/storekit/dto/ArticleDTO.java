@@ -14,6 +14,7 @@ public class ArticleDTO {
     private String category;
     private Long brandId;
     private String size;
+    private String detailSize;
     private String condition;
     private String detailCondition;
     private String state;
@@ -21,5 +22,6 @@ public class ArticleDTO {
     private boolean hashTags;
     private boolean dimensionPics;
     private boolean returnInfos;
+    private boolean emojis;
 }
 

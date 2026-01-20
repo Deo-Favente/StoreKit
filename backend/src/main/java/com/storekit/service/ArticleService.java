@@ -43,18 +43,22 @@ public class ArticleService {
         }
 
         ArticleEntity article = new ArticleEntity();
-        article.setName(dto.getName());
-        article.setPrice(dto.getPrice());
+        if (dto.getName() != null) article.setName(dto.getName());
+        if (dto.getPrice() != null) article.setPrice(dto.getPrice());
         article.setReturnInfos(dto.isReturnInfos());
         article.setHashTags(dto.isHashTags());
         article.setDimensionPics(dto.isDimensionPics());
+        article.setEmojis(dto.isEmojis());
+
         if (dto.getCategory() != null) article.setCategory(ArticleCategory.fromValue(dto.getCategory()));
         if (dto.getSize() != null) article.setSize(ArticleSize.fromValue(dto.getSize()));
+        if (dto.getDetailSize() != null) article.setDetailSize(dto.getDetailSize());
         if (dto.getCondition() != null) article.setCondition(ArticleCondition.fromValue(dto.getCondition()));
-        article.setDetailCondition(dto.getDetailCondition());
+        if (dto.getDetailCondition() != null) article.setDetailCondition(dto.getDetailCondition());
         if (dto.getState() != null) article.setState(ArticleState.fromValue(dto.getState()));
-        article.setPhotoCount(dto.getPhotoCount());
-        article.setBrand(brand);
+        if (dto.getPhotoCount() != null) article.setPhotoCount(dto.getPhotoCount());
+
+        if (brand != null) article.setBrand(brand);
 
         ArticleEntity saved = articleRepository.save(article);
         return articleMapper.toDTO(saved);
@@ -83,11 +87,12 @@ public class ArticleService {
             article.setBrand(brand);
         }
 
-        article.setName(dto.getName());
-        article.setPrice(dto.getPrice());
+        if (dto.getName() != null) article.setName(dto.getName());
+        if (dto.getPrice() != null) article.setPrice(dto.getPrice());
         article.setReturnInfos(dto.isReturnInfos());
         article.setHashTags(dto.isHashTags());
         article.setDimensionPics(dto.isDimensionPics());
+        article.setEmojis(dto.isEmojis());
 
         if (dto.getCategory() != null) {
             article.setCategory(ArticleCategory.fromValue(dto.getCategory()));
@@ -95,6 +100,10 @@ public class ArticleService {
 
         if (dto.getSize() != null) {
             article.setSize(ArticleSize.fromValue(dto.getSize()));
+        }
+
+        if (dto.getDetailSize() != null) {
+            article.setDetailSize(dto.getDetailSize());
         }
 
         if (dto.getCondition() != null) {

@@ -20,9 +20,11 @@ public class ArticleMapper {
         dto.setReturnInfos(article.isReturnInfos());
         dto.setHashTags(article.isHashTags());
         dto.setDimensionPics(article.isDimensionPics());
+        dto.setEmojis(article.isEmojis());
         if (article.getCategory() != null) dto.setCategory(article.getCategory().getValue());
         if (article.getBrand() != null) dto.setBrandId(article.getBrand().getId());
         if (article.getSize() != null) dto.setSize(article.getSize().getValue());
+        if (article.getDetailSize() != null) dto.setDetailSize(article.getDetailSize());
         if (article.getCondition() != null) dto.setCondition(article.getCondition().getValue());
         dto.setDetailCondition(article.getDetailCondition());
         if (article.getState() != null) dto.setState(article.getState().getValue());
@@ -38,9 +40,11 @@ public class ArticleMapper {
         article.setReturnInfos(dto.isReturnInfos());
         article.setHashTags(dto.isHashTags());
         article.setDimensionPics(dto.isDimensionPics());
+        article.setEmojis(dto.isEmojis());
         if (dto.getCategory() != null) article.setCategory(ArticleCategory.fromValue(dto.getCategory()));
         article.setBrand(brand);
         if (dto.getSize() != null) article.setSize(ArticleSize.fromValue(dto.getSize()));
+        article.setDetailSize(dto.getDetailSize());
         if (dto.getCondition() != null) article.setCondition(ArticleCondition.fromValue(dto.getCondition()));
         article.setDetailCondition(dto.getDetailCondition());
         if (dto.getState() != null) article.setState(ArticleState.fromValue(dto.getState()));

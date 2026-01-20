@@ -88,13 +88,15 @@ export class EditArticleComponent implements OnInit {
       price: 0,
       brandId: 0,
       size: null!,
+      detailSize: '',
       state: null!,
       photoCount: 0,
       condition: null!,
       detailCondition: '',
       hashTags: true,
       returnInfos: true,
-      dimensionPics: true  
+      dimensionPics: true,
+      emojis: true
     };
     this.photos = [];
   }
@@ -186,6 +188,12 @@ export class EditArticleComponent implements OnInit {
       .replace('{category}', category.toLowerCase().replace(/[^a-z]/g, ''))
       .replace('{size}', size)
 
+    if (this.article.detailSize) {
+      this.description = this.description.replace('{detailSize}', `, ${this.article.detailSize}`);
+    } else {
+      this.description = this.description.replace('{detailSize}', '');
+    }
+    
     if (this.article.dimensionPics) {
       this.description = this.description.replace('{dimPic}', '(voir dimensions à la fin)');
     } else {
@@ -204,6 +212,14 @@ export class EditArticleComponent implements OnInit {
     else {
       this.description = this.description.replace('{tags}', '');
     }
+    if (!this.article.emojis) {
+      this.description = this.description
+        .replace(/\r\n?/g, '\n')
+        .replace(/[\u200B\u200C\u200D\u200E\u200F\u2060\uFEFF]/g, '')
+        .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\uFE0F\|]/gu, '')
+        .replace(/^[ \t\u00A0\u2000-\u200A\u202F\u205F\u3000]+/gm, '');
+    }
+    this.description = this.description + '\n' + this.article.id;
     // put the description in the container with resize
     //this.description = description;
   }
@@ -237,16 +253,20 @@ export class EditArticleComponent implements OnInit {
       return;
     }
 
-    const result = await this.popUpService.showPopUp({message: 'Choose how to add photos:', actionMessage: 'Open shortcut (IOS)', action: async () => { 
-      window.open("shortcuts://run-shortcut?name=StoreKit%20-%20Take%20pics&input=text&text=" + this.article.id, '_blank')} , actionMessage2: 'Upload manually', action2: async () => { this.openPhotoImport();
-    }});
+    const result = await this.popUpService.showPopUp({
+      message: 'Choose how to add photos:', actionMessage: 'Open shortcut (IOS)', action: async () => {
+        window.open("shortcuts://run-shortcut?name=StoreKit%20-%20Take%20pics&input=text&text=" + this.article.id, '_blank')
+      }, actionMessage2: 'Upload manually', action2: async () => {
+        this.openPhotoImport();
+      }
+    });
     if (result) {
       this.loadArticlePhotos();
     }
   }
 
   openPhotoImport() {
-    const input = document.createElement('input');  
+    const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
     input.multiple = true;
@@ -256,19 +276,19 @@ export class EditArticleComponent implements OnInit {
       if (!input.files) return;
 
       const files = Array.from(input.files);
-      const uploadPromises = files.map(file => 
-      this.articleService.uploadPhoto(this.article.id, file).toPromise()
+      const uploadPromises = files.map(file =>
+        this.articleService.uploadPhoto(this.article.id, file).toPromise()
       );
 
       try {
-      await Promise.all(uploadPromises);
-      this.loadArticlePhotos(); // Refresh the photo list from the backend
-      this.article.photoCount = this.photos.length;
-      this.saveArticle();
-      this.notificationService.showSuccess('Photos ajoutées avec succès !');
+        await Promise.all(uploadPromises);
+        this.loadArticlePhotos(); // Refresh the photo list from the backend
+        this.article.photoCount = this.photos.length;
+        this.saveArticle();
+        this.notificationService.showSuccess('Photos ajoutées avec succès !');
       } catch (err) {
-      console.error(err);
-      this.notificationService.showError('Erreur lors de l\'ajout des photos');
+        console.error(err);
+        this.notificationService.showError('Erreur lors de l\'ajout des photos');
       }
     };
   }
@@ -276,18 +296,18 @@ export class EditArticleComponent implements OnInit {
   // Supprimer une photo par nom
   removePhoto(photoNumber: number, index: number) {
 
-this.articleService.deletePhoto(this.article.id, this.getNameByIndex(index)).subscribe({
-  next: () => {
-    this.photos.splice(index, 1); // supprime localement pour UX immédiate
-    this.article.photoCount = this.photos.length;
-    this.saveArticle();
-    this.notificationService.showSuccess('Photo supprimée !');
-  },
-  error: (err) => {
-    console.error(err);
-    this.notificationService.showError('Erreur lors de la suppression de la photo');
-  }
-});
+    this.articleService.deletePhoto(this.article.id, this.getNameByIndex(index)).subscribe({
+      next: () => {
+        this.photos.splice(index, 1); // supprime localement pour UX immédiate
+        this.article.photoCount = this.photos.length;
+        this.saveArticle();
+        this.notificationService.showSuccess('Photo supprimée !');
+      },
+      error: (err) => {
+        console.error(err);
+        this.notificationService.showError('Erreur lors de la suppression de la photo');
+      }
+    });
   }
 
   removePhotoByName(photoName: string) {
@@ -349,33 +369,33 @@ this.articleService.deletePhoto(this.article.id, this.getNameByIndex(index)).sub
         this.removePhotoByName(result.photoName);
 
       } else if (result?.action === 'setMain') {
-          const index = this.photos.findIndex(name => name === result.photoName);
-          if (index === -1) return;
+        const index = this.photos.findIndex(name => name === result.photoName);
+        if (index === -1) return;
 
-          // Mettre à jour localement pour UX immédiate
-          this.photos.splice(index, 1);
-          this.photos.unshift(result.photoName);
+        // Mettre à jour localement pour UX immédiate
+        this.photos.splice(index, 1);
+        this.photos.unshift(result.photoName);
 
-          // Appelle le back pour sauvegarder
-          this.articleService.switchPhotos(
-            this.article.id,
-            this.getNameByIndex(0),
-            this.getNameByIndex(index)
-          ).subscribe({
-            next: () => {
-              this.article.photoCount = this.photos.length;
-              this.saveArticle();
-              this.notificationService.showSuccess('Photo principale mise à jour !');
-            },
-            error: (err) => {
-              console.error(err);
-              this.notificationService.showError('Erreur lors de la mise à jour de la photo principale');
-              // revert si erreur
-              this.photos.splice(0, 1);
-              this.photos.splice(index, 0, result.photoName);
-            }
-          });
-        }
+        // Appelle le back pour sauvegarder
+        this.articleService.switchPhotos(
+          this.article.id,
+          this.getNameByIndex(0),
+          this.getNameByIndex(index)
+        ).subscribe({
+          next: () => {
+            this.article.photoCount = this.photos.length;
+            this.saveArticle();
+            this.notificationService.showSuccess('Photo principale mise à jour !');
+          },
+          error: (err) => {
+            console.error(err);
+            this.notificationService.showError('Erreur lors de la mise à jour de la photo principale');
+            // revert si erreur
+            this.photos.splice(0, 1);
+            this.photos.splice(index, 0, result.photoName);
+          }
+        });
+      }
     });
   }
 }

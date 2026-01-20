@@ -47,6 +47,14 @@ export class ArticlesItemComponent implements OnInit {
     });
   }
 
+  showDeleteArticlePopup() {
+    this.popupService.showPopUp({
+      message: `Delete article ${this.article.id} permanently ?`,
+      actionMessage: 'Delete',
+      action: async () => this.deleteArticle()  
+    });
+  }
+
   deleteArticle() {
     this.articleService.deleteArticle(this.article.id).subscribe({
       next: () => {
@@ -147,8 +155,13 @@ export class ArticlesItemComponent implements OnInit {
       .replace('{title}', name)
       .replace('{condition}', condition + (detailCondition ? `, ${detailCondition}` : ''))
       .replace('{category}', category.toLowerCase().replace(/[^a-z]/g, ''))
-      .replace('{size}', size)
-
+      .replace('{size}', size);
+      
+    if (this.article.detailSize) {
+      description = description.replace('{detailSize}', `, ${this.article.detailSize}`);
+    } else {
+      description = description.replace('{detailSize}', '');
+    }
     if (this.article.dimensionPics) {
       description = description.replace('{dimPic}', '(voir dimensions à la fin)');
     } else {
@@ -166,6 +179,14 @@ export class ArticlesItemComponent implements OnInit {
     }
     else {
       description = description.replace('{tags}', '');
+    }
+
+    if (!this.article.emojis) {
+      description = description
+        .replace(/\r\n?/g, '\n')
+        .replace(/[\u200B\u200C\u200D\u200E\u200F\u2060\uFEFF]/g, '')
+        .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\uFE0F\|]/gu, '')
+        .replace(/^[ \t\u00A0\u2000-\u200A\u202F\u205F\u3000]+/gm, '');
     }
 
     return description;

@@ -17,7 +17,6 @@ public class BrandService {
     public List<BrandEntity> getAllBrands() {
         return brandRepository.findAll();
     }
-
     public BrandEntity getBrandById(Long id) {
         return brandRepository.findById(id).orElse(null);
     }

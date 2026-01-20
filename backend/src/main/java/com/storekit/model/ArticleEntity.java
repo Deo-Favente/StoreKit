@@ -55,6 +55,7 @@ public class ArticleEntity {
 
     @Enumerated(EnumType.STRING)
     private ArticleSize size;
+    private String detailSize;
 
     @Enumerated(EnumType.STRING)
     private ArticleCondition condition;
@@ -68,6 +69,7 @@ public class ArticleEntity {
     private boolean hashTags;
     private boolean dimensionPics;
     private boolean returnInfos;
+    private boolean emojis;
 
     @Column(name = "created_at")
     private Long createdAt;
