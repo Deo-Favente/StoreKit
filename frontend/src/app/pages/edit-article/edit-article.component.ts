@@ -20,7 +20,7 @@ import { EnumService } from '@services/enum.service';
 @Component({
   selector: 'app-edit-article',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule, DragDropModule, RouterLink],
+  imports: [CommonModule, FormsModule, MatIconModule, RouterLink],
   templateUrl: './edit-article.component.html'
 })
 
@@ -220,6 +220,7 @@ export class EditArticleComponent implements OnInit {
   loadArticlePhotos() {
     this.articleService.getPhotos(this.article.id).subscribe((photoNames: string[]) => {
       this.photos = photoNames; // On ne garde que les noms
+      this.article.photoCount = this.photos.length;
       console.log('Photos chargées:', this.photos);
     });
   }
@@ -262,7 +263,7 @@ export class EditArticleComponent implements OnInit {
       try {
       await Promise.all(uploadPromises);
       this.loadArticlePhotos(); // Refresh the photo list from the backend
-      this.article.photoCount = this.photos.length; 
+      this.article.photoCount = this.photos.length;
       this.saveArticle();
       this.notificationService.showSuccess('Photos ajoutées avec succès !');
       } catch (err) {
