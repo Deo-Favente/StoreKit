@@ -237,7 +237,7 @@ export class EditArticleComponent implements OnInit {
       return;
     }
 
-    const result = await this.popUpService.showPopUp({message: 'Redirecting... Close to upload manually.', actionMessage: 'Open shortcut (IOS)', action: async () => { 
+    const result = await this.popUpService.showPopUp({message: 'Choose how to add photos:', actionMessage: 'Open shortcut (IOS)', action: async () => { 
       window.open("shortcuts://run-shortcut?name=StoreKit%20-%20Take%20pics&input=text&text=" + this.article.id, '_blank')} , actionMessage2: 'Upload manually', action2: async () => { this.openPhotoImport();
     }});
     if (result) {
