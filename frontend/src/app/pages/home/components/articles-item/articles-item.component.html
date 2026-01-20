@@ -8,7 +8,7 @@
         </button>
     </div>
 
-    <img [src]="photoUrl" alt="{{ article.name }}" class="w-20 h-20 object-cover rounded" onerror="onError()" />
+    <img [src]="photoUrl" alt="{{ article.name }}" class="w-20 h-20 object-cover rounded" (error)="onError()" />
     <div class="flex flex-col">
         <div>
             <div class="flex flex-col">
