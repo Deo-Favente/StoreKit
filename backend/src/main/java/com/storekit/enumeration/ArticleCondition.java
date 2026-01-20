@@ -1,11 +1,11 @@
 package com.storekit.enumeration;
 
 public enum ArticleCondition {
-    NEW_WITH_TAGS("New with tags"),
-    NEW_NO_TAGS("New no tags"),
-    VERY_GOOD("Very good"),
-    GOOD("Good"),
-    SATISFYING("Satisfying");
+    NEW_WITH_TAGS("Neuf avec étiquettes"),
+    NEW_NO_TAGS("Neuf sans étiquettes"),
+    VERY_GOOD("Très bon état"),
+    GOOD("Bon état"),
+    SATISFYING("Satisfaisant");
 
     private final String value;
     ArticleCondition(final String value) {

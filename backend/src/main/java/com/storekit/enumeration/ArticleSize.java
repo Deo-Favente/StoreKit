@@ -7,7 +7,7 @@ public enum ArticleSize {
     L,
     XL,
     XXL,
-    ONE_SIZE("One Size");
+    ONE_SIZE("Taille unique");
 
     private final String value;
     ArticleSize(final String value) {

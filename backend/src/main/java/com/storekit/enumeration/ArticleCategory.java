@@ -4,11 +4,11 @@ public enum ArticleCategory {
     TSHIRT("T-shirt"),
     SWEATSHIRT("Sweatshirt"),
     JEANS("Jeans"),
-    JACKET("Jacket"),
-    BAG("Bag"),
-    SHOES("Shoes"),
-    ACCESSORY("Accessory"),
-    OTHER("Other");
+    JACKET("Veste"),
+    BAG("Sac"),
+    SHOES("Chaussures"),
+    ACCESSORY("Accessoire"),
+    OTHER("Autre");
 
     private final String value;
     ArticleCategory(final String value) {
