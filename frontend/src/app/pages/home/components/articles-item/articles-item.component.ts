@@ -35,6 +35,10 @@ export class ArticlesItemComponent implements OnInit {
     });
   }
 
+  onError() {
+    this.photoUrl = '/img/articles/default.png';
+  }
+
   onStateChange() {
     this.articleService.updateArticle(this.article.id, this.article).subscribe({
       error: (err) => {

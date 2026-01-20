@@ -8,11 +8,7 @@
         </button>
     </div>
 
-    @if (article.photoCount > 0) {
-    <img [src]="photoUrl" alt="{{ article.name }}" class="w-20 h-20 object-cover rounded" />
-    } @else {
-    <img src="/img/articles/default.png" alt="{{ article.name }}" class="w-20 h-20 object-cover rounded" />
-    }
+    <img [src]="photoUrl" alt="{{ article.name }}" class="w-20 h-20 object-cover rounded" onerror="onError()" />
     <div class="flex flex-col">
         <div>
             <div class="flex flex-col">
