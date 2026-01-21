@@ -1,7 +1,7 @@
 package com.storekit.enumeration;
 
 public enum ArticleState {
-    IN_STOCK("In Stock"),
+    IN_STOCK("In stock"),
     SOLD("Sold"),
     WAITING_FOR_EDIT("Waiting for edit"),
     RETURN_ASKED("Return asked"),
